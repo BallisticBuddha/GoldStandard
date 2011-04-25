@@ -1,0 +1,15 @@
+name: GoldStandard
+main: com.bukkit.BallisticBuddha.GoldStandard.GoldStandard
+version: 0.1
+author: BallisticBuddha
+commands:
+  gsworth:
+    aliases: gsprice
+    description: Used for checking the current price of the item
+    usage: |
+           /gsworth
+  gsclear:
+    aliases: gsreset
+    description: Used for resetting the price of the item (clearing all sale records)
+    usage: |
+           /gsclear
