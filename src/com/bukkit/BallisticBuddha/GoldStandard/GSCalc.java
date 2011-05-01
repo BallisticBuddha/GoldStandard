@@ -18,7 +18,7 @@ public class GSCalc {
 		this.system = this.gs.getConfig().getString("Data","none");
 		
 		if (system.equalsIgnoreCase("none")){
-			this.worth =  this.gs.getConfig().getDouble("base",100.0);
+			this.worth =  this.gs.getConfig().getDouble("Base",100.0);
 		}
 		else if (system.equalsIgnoreCase("mysql")){
 			this.data = new GSData();
@@ -26,14 +26,15 @@ public class GSCalc {
 			this.calculate();
 		}
 	}
-	
 	private void calculate(){
-		if ((data.getBase() - (data.getMyTransactions() * data.getRatio())) >= data.getMin())
-			this.worth = (data.getBase() - (data.getMyTransactions() * data.getRatio()));
-		else 
+		double val = (data.getBase() - (data.getMyTransactions() * data.getRatio()));
+		if (val < data.getMin())
 			this.worth = data.getMin();
+		else if (val > data.getMax())
+			this.worth = data.getMax();
+		else
+			this.worth = val;
 	}
-	
 	public double getWorth(){
 		if (!this.system.equalsIgnoreCase("none"))
 			this.calculate();		

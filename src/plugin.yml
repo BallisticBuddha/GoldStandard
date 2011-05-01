@@ -1,6 +1,6 @@
 name: GoldStandard
 main: com.bukkit.BallisticBuddha.GoldStandard.GoldStandard
-version: 0.1
+version: 0.5
 author: BallisticBuddha
 commands:
   gsworth:
@@ -13,3 +13,15 @@ commands:
     description: Used for resetting the price of the item (clearing all sale records)
     usage: |
            /gsclear
+  gssell:
+    aliases: 
+        - gsell
+    description: Sell a specified number of the item directly from your inventory
+    usage: |
+           /gssell <amount>
+  gsbuy:
+      aliases: 
+          - gbuy
+      description: Buy the specified amount of gold
+      usage: |
+             /gsbuy <amount>

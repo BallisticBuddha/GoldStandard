@@ -16,6 +16,7 @@ public class GSData {
 	private int transactions;
 	private double ratio;
 	private double min;
+	private double max;
 	private Object CalcLock = new Object();
 	private static Logger log = Logger.getLogger("Minecraft");	private GoldStandard gs;
 	private Configuration config;
@@ -25,10 +26,11 @@ public class GSData {
 		gs = (GoldStandard) GoldStandard.getBukkitServer().getPluginManager().getPlugin("GoldStandard");
 		this.config = gs.getConfig();
 		
-		this.base = this.config.getDouble("base", 100.0);
-		this.min = (this.config.getDouble("minimum", 0.0));
-		this.duration = this.config.getInt("duration", 7);
-		this.ratio = this.config.getDouble("ratio", .1);
+		this.base = this.config.getDouble("Base", 100.0);
+		this.min = (this.config.getDouble("Minimum", 0.0));
+		this.max = (this.config.getDouble("Maximum", base));
+		this.duration = this.config.getInt("Duration", 7);
+		this.ratio = this.config.getDouble("Ratio", .1);
 		
 		this.initSQL();
 		this.createTable();
@@ -59,7 +61,7 @@ public class GSData {
 				stmt.executeUpdate("CREATE TABLE IF NOT EXISTS `gslog` (" +
 						"`pkgslog` int(10) unsigned NOT NULL AUTO_INCREMENT," +
 						"`time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP," +
-						"`amount` int(10) unsigned NOT NULL DEFAULT '1'," +
+						"`amount` int(10) NOT NULL DEFAULT '1'," +
 						"`user` varchar(45) DEFAULT NULL," +
 						"PRIMARY KEY (`pkgslog`)" +
 						") ENGINE=InnoDB DEFAULT CHARSET=latin1");
@@ -199,5 +201,8 @@ public class GSData {
 	}
 	public double getMin() {
 		return min;
+	}
+	public double getMax() {
+		return max;
 	}
 }
