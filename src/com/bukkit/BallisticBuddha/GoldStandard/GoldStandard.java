@@ -33,11 +33,10 @@ import java.text.*;
 
 /**
 	@author BallisticBuddha
-	@version 1.0
+	@version 0.6
 	
 	Gold Standard plugin for bukkit
 	
-	TODO: hook into LWC or other block protection system to disable selling from private furnaces
 	TODO: create SQLite version of GSData
 */
 public class GoldStandard extends JavaPlugin{
@@ -57,6 +56,8 @@ public class GoldStandard extends JavaPlugin{
 	public static PermissionHandler Permissions = null;
 	private DecimalFormat df = new DecimalFormat("#.##");
 	private int CleanseTask;
+	private String protectSystem;
+	private ContainerProtect protection;
 	
 	public final HashMap<Player, ArrayList<Block>> gsUsers = new HashMap<Player, ArrayList<Block>>();
 	//private final HashMap<Player, Boolean> debugees = new HashMap<Player, Boolean>();
@@ -87,12 +88,14 @@ public class GoldStandard extends JavaPlugin{
         sellItem = config.getInt("Item", 266);
         sellTool = config.getInt("SellTool", 283);
         buybackEnabled = config.getBoolean("Buyback", false);
+        buybackEnabled = config.getBoolean("Buyback", false);
     	ArrayList<String> tempAR = (ArrayList<String>) config.getStringList("SellMethods", null);
     	for (String item : tempAR){
     		sellMethods.add(item.toLowerCase());
     	}
         setupPermissions();
         log.info( pdfFile.getName() + " version " + pdfFile.getVersion() + " enabled!" );
+        setupProtection();
 	}
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args) {
@@ -225,6 +228,23 @@ public class GoldStandard extends JavaPlugin{
                 GoldStandard.Permissions = ((Permissions) permissions).getHandler();
         }
     }
+	private void setupProtection(){
+		protectSystem = getConfig().getString("Protection","none");
+		
+		if (protectSystem.equalsIgnoreCase("none")){
+			log.info("[GoldStandard] No protection system was specified, block protection is disabled.");
+			protection = new NoneProtect(this);
+		}
+		else if (protectSystem.equalsIgnoreCase("LWC")){
+			log.info("[GoldStandard] Block protection set to use LWC.");
+			protection = new LWCProtect(this);
+		}
+		else{
+			protection = new NoneProtect(this);
+			log.info("[GoldStandard] An invalid protection system was specified, block protection is disabled.");
+			protectSystem = "None";
+		}		
+	}
     //Organization stuff goes here
     public GSCalc getCalc(){
     	return this.calc;
@@ -252,6 +272,12 @@ public class GoldStandard extends JavaPlugin{
     }
     public boolean commandMode(){
     	return sellMethods.containsAll(Collections.singleton("command"));
+    }
+    public String getProtectionType(){
+    	return protectSystem;
+    }
+    public ContainerProtect getProtection(){
+    	return protection;
     }
     public static Server getBukkitServer() {
         return Server;

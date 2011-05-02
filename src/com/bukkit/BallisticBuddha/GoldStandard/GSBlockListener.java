@@ -1,6 +1,5 @@
 package com.bukkit.BallisticBuddha.GoldStandard;
 
-import com.bukkit.BallisticBuddha.GoldStandard.GSPlayerListener;
 import com.nijiko.coelho.iConomy.iConomy;
 
 import org.bukkit.Material;
@@ -43,43 +42,50 @@ public class GSBlockListener extends BlockListener{
 	    }
 	    private void sellIt(BlockDamageEvent event, String SellObject){
 	    	Player player = event.getPlayer();
-	    	if (player instanceof Player) //just in case?
-				if (player.getItemInHand().getTypeId() == plugin.getSellTool()){
-					Inventory stuff = null;
-					if (SellObject.equalsIgnoreCase("Furnace"))
-						stuff = ((Furnace) ((ContainerBlock) event.getBlock().getState())).getInventory();
-					else if (SellObject.equalsIgnoreCase("Chest"))
-						stuff = ((Chest) ((ContainerBlock) event.getBlock().getState())).getInventory();
-					else if (SellObject.equalsIgnoreCase("Dispenser"))
-						stuff = ((Dispenser) ((ContainerBlock) event.getBlock().getState())).getInventory();
-					else
-						return;
-					if (isEmpty(stuff)){
-						buyIt(stuff,player);
-						return;
-					}
-					if (stuff.contains(plugin.getItem())){
-			    	   	if (!hasPermissions(player, "goldstandard.sell")){
-			    	   		player.sendMessage(ChatColor.RED.toString() +"You do not have permission to sell.");
-			    	   		return;
-			    	   	}
-						int amt = 0;
-						double totalSale = 0;
-						for (ItemStack is : stuff.getContents()){
-							if (is != null)
-	    						if (is.getTypeId() == plugin.getItem())
-	    							amt += is.getAmount();
-						}
-						for (int i=0;i<amt;i++){
-							totalSale += plugin.getCalc().getWorth();
-							plugin.getCalc().forceIncrement(1); //increment counter once
-						}
-						stuff.remove(plugin.getItem()); //clear the container of all matching items
-						plugin.getCalc().addEntryNI(amt,player.getName());//add to gslog without incrementing the transactions counter
-						iConomy.getBank().getAccount(player.getName()).add(totalSale); //give them money
-						player.sendMessage(ChatColor.GREEN.toString() + "Sold "+amt+" "+ plugin.formatMaterialName(Material.getMaterial(plugin.getItem())) + " for " +df.format(totalSale)+ " "+ iConomy.getBank().getCurrency());
-					}
+			if (player.getItemInHand().getTypeId() == plugin.getSellTool()){
+				Inventory stuff = null;
+				if (SellObject.equalsIgnoreCase("Furnace"))
+					stuff = ((Furnace) ((ContainerBlock) event.getBlock().getState())).getInventory();
+				else if (SellObject.equalsIgnoreCase("Chest"))
+					stuff = ((Chest) ((ContainerBlock) event.getBlock().getState())).getInventory();
+				else if (SellObject.equalsIgnoreCase("Dispenser"))
+					stuff = ((Dispenser) ((ContainerBlock) event.getBlock().getState())).getInventory();
+				else
+					return;
+				if (stuff == null)
+					return;
+				
+				if (isEmpty(stuff)){
+					buyIt(stuff,player);
+					return;
 				}
+				if (stuff.contains(plugin.getItem())){
+			   	   	if (!hasPermissions(player, "goldstandard.sell")){
+			   	   		player.sendMessage(ChatColor.RED.toString() +"You do not have permission to sell.");
+			   	   		return;
+			   	   	}
+					if (!plugin.getProtection().canSellFrom(player, event.getBlock())){
+						player.sendMessage(ChatColor.RED.toString() +"You do not have access to this "+SellObject+".");
+						return;
+					}
+			   	   	//start selling
+					int amt = 0;
+					double totalSale = 0;
+					for (ItemStack is : stuff.getContents()){
+						if (is != null)
+	    					if (is.getTypeId() == plugin.getItem())
+	    						amt += is.getAmount();
+					}
+					for (int i=0;i<amt;i++){
+						totalSale += plugin.getCalc().getWorth();
+						plugin.getCalc().forceIncrement(1); //increment counter once
+					}
+					stuff.remove(plugin.getItem()); //clear the container of all matching items
+					plugin.getCalc().addEntryNI(amt,player.getName());//add to gslog without incrementing the transactions counter
+					iConomy.getBank().getAccount(player.getName()).add(totalSale); //give them money
+					player.sendMessage(ChatColor.GREEN.toString() + "Sold "+amt+" "+ plugin.formatMaterialName(Material.getMaterial(plugin.getItem())) + " for " +df.format(totalSale)+ " "+ iConomy.getBank().getCurrency());
+				}
+			}
 	    }
 	    private void buyIt (Inventory stuff, Player player){
 	    	if (!plugin.getBuyback())
