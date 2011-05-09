@@ -1,6 +1,8 @@
 package com.bukkit.BallisticBuddha.GoldStandard;
 
-import com.nijiko.coelho.iConomy.iConomy;
+import com.iConomy.*;
+import com.iConomy.system.Account;
+import com.iConomy.system.Holdings;
 
 import org.bukkit.Material;
 import org.bukkit.block.Chest;
@@ -17,12 +19,11 @@ import java.text.*;
 
 public class GSBlockListener extends BlockListener{
 	
-		public static GoldStandard plugin = null;	
-		private static iConomy iConomy = null;
-		private DecimalFormat df = new DecimalFormat("#.##");
+		private static GoldStandard plugin = null;
+		private iConomy iConomy = null; 
 		public GSBlockListener(GoldStandard instance){
 			plugin = instance;
-			iConomy = GoldStandard.getiConomy();
+			iConomy = plugin.iConomy;
 		}
 		
 	    private static boolean hasPermissions(Player p, String s) {
@@ -54,9 +55,13 @@ public class GSBlockListener extends BlockListener{
 					return;
 				if (stuff == null)
 					return;
-				
+				Holdings holdings = iConomy.getAccount(player.getName()).getHoldings();
+				if (holdings == null){
+					player.sendMessage(ChatColor.RED.toString() + "An error occurred while retrieving your holdings :(");
+					return;
+				}
 				if (isEmpty(stuff)){
-					buyIt(stuff,player);
+					buyIt(stuff,player,holdings);
 					return;
 				}
 				if (stuff.contains(plugin.getItem())){
@@ -82,26 +87,27 @@ public class GSBlockListener extends BlockListener{
 					}
 					stuff.remove(plugin.getItem()); //clear the container of all matching items
 					plugin.getCalc().addEntryNI(amt,player.getName());//add to gslog without incrementing the transactions counter
-					iConomy.getBank().getAccount(player.getName()).add(totalSale); //give them money
-					player.sendMessage(ChatColor.GREEN.toString() + "Sold "+amt+" "+ plugin.formatMaterialName(Material.getMaterial(plugin.getItem())) + " for " +df.format(totalSale)+ " "+ iConomy.getBank().getCurrency());
+						holdings.add(totalSale); //give them money
+						player.sendMessage(ChatColor.GREEN.toString() + "Sold "+amt+" "+ plugin.formatMaterialName(Material.getMaterial(plugin.getItem())) + " for " +iConomy.format(totalSale));	
+					
 				}
 			}
 	    }
-	    private void buyIt (Inventory stuff, Player player){
+	    private void buyIt (Inventory stuff, Player player, Holdings holdings){
 	    	if (!plugin.getBuyback())
 	    		return;
 	    	if (!GoldStandard.Permissions.has(player, "goldstandard.buy")){
 	    		player.sendMessage(ChatColor.RED.toString() +"You do not have permission to buy.");
 	    		return;
 	    	}
-	    	if (plugin.getCalc().getWorth() > iConomy.getBank().getAccount(player.getName()).getBalance()){
+	    	if (plugin.getCalc().getWorth() > holdings.balance()){
 				player.sendMessage(ChatColor.RED.toString() +"Insufficient Funds");
 				return;
 	    	}
-			iConomy.getBank().getAccount(player.getName()).add(-plugin.getCalc().getWorth());
+			holdings.subtract(plugin.getCalc().getWorth());
 			player.getInventory().addItem(new ItemStack(plugin.getItem(),1));
 			plugin.getCalc().addEntry(-1,player.getName());
-			player.sendMessage(ChatColor.GREEN.toString() + "Bought 1 "+ plugin.formatMaterialName(Material.getMaterial(plugin.getItem())) + " for " +df.format(plugin.getCalc().getWorth())+ " "+ iConomy.getBank().getCurrency());
+			player.sendMessage(ChatColor.GREEN.toString() + "Bought 1 "+ plugin.formatMaterialName(Material.getMaterial(plugin.getItem())) + " for " +iConomy.format(plugin.getCalc().getWorth()));
 	    }
 	    private boolean isEmpty(Inventory i){
 	    	for (ItemStack is : i.getContents())

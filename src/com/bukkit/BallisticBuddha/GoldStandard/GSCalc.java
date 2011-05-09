@@ -1,17 +1,18 @@
 package com.bukkit.BallisticBuddha.GoldStandard;
 
-import org.bukkit.util.config.Configuration;
+import java.util.logging.Logger;
 
 /**
- * Handler for GSData to choose which class to use and drive it from this object
+ * Handler for GSData to choose which data class to use and drive it from this object
  */
-		
+
 public class GSCalc {
 	
 	private GSData data = null;
 	private double worth = 0;
 	private String system;
 	private GoldStandard gs = null;
+	protected static Logger log = Logger.getLogger("Minecraft");
 	
 	public GSCalc(GoldStandard instance){
 		this.gs = instance;
@@ -19,15 +20,21 @@ public class GSCalc {
 		
 		if (system.equalsIgnoreCase("none")){
 			this.worth =  this.gs.getConfig().getDouble("Base",100.0);
+			log.info("[GoldStandard] Using static pricing.");
 		}
 		else if (system.equalsIgnoreCase("mysql")){
-			this.data = new GSData();
-			this.data.initialize();
+			this.data = new GSDataMySQL();
 			this.calculate();
+			log.info("[GoldStandard] MySQL driver loaded.");
+		}
+		else if (system.equalsIgnoreCase("h2sql") || system.equalsIgnoreCase("h2")){
+			this.data = new GSDataH2();
+			this.calculate();
+			log.info("[GoldStandard] H2 driver loaded.");
 		}
 	}
 	private void calculate(){
-		double val = (data.getBase() - (data.getMyTransactions() * data.getRatio()));
+		double val = (data.getBase() - (data.getTransactions() * data.getRatio()));
 		if (val < data.getMin())
 			this.worth = data.getMin();
 		else if (val > data.getMax())

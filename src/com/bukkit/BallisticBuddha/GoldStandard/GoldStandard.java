@@ -1,6 +1,7 @@
 package com.bukkit.BallisticBuddha.GoldStandard;
 
-import com.nijiko.coelho.iConomy.iConomy;
+import com.iConomy.*;
+import com.iConomy.system.Holdings;
 import com.nijikokun.bukkit.Permissions.Permissions;
 import com.nijiko.permissions.PermissionHandler;
 
@@ -22,6 +23,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
+import org.bukkit.event.Event.Type;
+import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -43,24 +46,22 @@ public class GoldStandard extends JavaPlugin{
 	
 	private final GSPlayerListener playerListener = new GSPlayerListener(this);
 	private final GSBlockListener blockListener = new GSBlockListener(this);
-	private static PluginListener pluginListener = null;
+	public iConomy iConomy = null;
 	private static Logger log = Logger.getLogger("Minecraft");
-	private static iConomy iConomy = null;
-	private static Server Server = null;
+	private static Server bukkitServer = null;
 	private int sellItem = 0;
 	private int sellTool = 0;
 	private boolean buybackEnabled;
+	private int reloadInterval;
 	private List<String> sellMethods = new ArrayList<String>();
 	private GSCalc calc = null;
 	private Configuration config = new Configuration(new File("plugins/GoldStandard/config.yml"));
 	public static PermissionHandler Permissions = null;
-	private DecimalFormat df = new DecimalFormat("#.##");
 	private int CleanseTask;
 	private String protectSystem;
 	private ContainerProtect protection;
 	
 	public final HashMap<Player, ArrayList<Block>> gsUsers = new HashMap<Player, ArrayList<Block>>();
-	//private final HashMap<Player, Boolean> debugees = new HashMap<Player, Boolean>();
 	
 	@Override
 	public void onDisable() {
@@ -70,29 +71,28 @@ public class GoldStandard extends JavaPlugin{
 	@Override
 	public void onEnable() {
         PluginManager pm = getServer().getPluginManager();
-        Server = getServer();
-        pluginListener = new PluginListener();
+        bukkitServer = getServer();
         pm.registerEvent(Event.Type.BLOCK_DAMAGE, blockListener, Priority.High, this);
-        pm.registerEvent(Event.Type.PLUGIN_ENABLE, pluginListener, Priority.Monitor, this);
-        //getCommand("debug").setExecutor(new SampleDebugCommand(this));
+        pm.registerEvent(Type.PLUGIN_ENABLE, new ServerICS(this), Priority.Monitor, this);
+        pm.registerEvent(Type.PLUGIN_DISABLE, new ServerICS(this), Priority.Monitor, this);
         config.load();
         calc = new GSCalc (this);
         PluginDescriptionFile pdfFile = this.getDescription();
+        sellItem = config.getInt("Item", 266);
+        sellTool = config.getInt("SellTool", 283);
+        buybackEnabled = config.getBoolean("Buyback", false);
+        reloadInterval = config.getInt("Reload Interval", 60);
+    	ArrayList<String> tempAR = (ArrayList<String>) config.getStringList("SellMethods", null);
+    	for (String item : tempAR){
+    		sellMethods.add(item.toLowerCase());
+    	}
         //Start synchronous cleanser thread
         CleanseTask = this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
             public void run() {
             	if (calc.needsCleaning())
             		calc.clearOld();
             }
-        }, 60 * 21L, 360 * 21L);
-        sellItem = config.getInt("Item", 266);
-        sellTool = config.getInt("SellTool", 283);
-        buybackEnabled = config.getBoolean("Buyback", false);
-        buybackEnabled = config.getBoolean("Buyback", false);
-    	ArrayList<String> tempAR = (ArrayList<String>) config.getStringList("SellMethods", null);
-    	for (String item : tempAR){
-    		sellMethods.add(item.toLowerCase());
-    	}
+        }, 60 * 21L, reloadInterval*60 * 21L);
         setupPermissions();
         log.info( pdfFile.getName() + " version " + pdfFile.getVersion() + " enabled!" );
         setupProtection();
@@ -108,7 +108,7 @@ public class GoldStandard extends JavaPlugin{
 	    	    		player.sendMessage(ChatColor.RED.toString() +"You do not have permission to use that command.");
 	    	    		return true;
 	    	    	}
-	    			player.sendMessage(ChatColor.YELLOW.toString() +"The current going price of "+ formatMaterialName(Material.getMaterial(sellItem)) +" is "+df.format(this.getCalc().getWorth())+ " "+ getiConomy().getBank().getCurrency());
+	    			player.sendMessage(ChatColor.YELLOW.toString() +"The current going price of "+ formatMaterialName(Material.getMaterial(sellItem)) +" is "+iConomy.format(this.getCalc().getWorth()));
 	    			return true;
 	    		}
 	    		if (commandName.equalsIgnoreCase("gsclear")){
@@ -147,6 +147,11 @@ public class GoldStandard extends JavaPlugin{
 	    			}
 	    			int totalInInventory = 0;
 					double totalSale = 0;
+					Holdings holdings = iConomy.getAccount(player.getName()).getHoldings();
+					if (holdings == null){
+						player.sendMessage(ChatColor.RED.toString() + "An error occurred while retrieving your holdings :(");
+						return true;
+					}
 					for (ItemStack is : stuff.getContents()){
 						if (is != null)
 							if (is.getTypeId() == getItem())
@@ -163,10 +168,11 @@ public class GoldStandard extends JavaPlugin{
 					}
 					ItemStack tis = new ItemStack(getItem(),totalInInventory-amt);
 			    	stuff.remove(getItem());
-			    	stuff.addItem(tis);
+			    	if (tis.getAmount() > 0)
+			    		stuff.addItem(tis);
 					getCalc().addEntryNI(amt,player.getName());//add to gslog without incrementing the transactions counter
-					iConomy.getBank().getAccount(player.getName()).add(totalSale); //give them money
-					player.sendMessage(ChatColor.GREEN.toString() + "Sold "+amt+" "+ formatMaterialName(Material.getMaterial(getItem())) + " for " +df.format(totalSale)+ " "+ iConomy.getBank().getCurrency());
+					holdings.add(totalSale); //give them money
+					player.sendMessage(ChatColor.GREEN.toString() + "Sold "+amt+" "+ formatMaterialName(Material.getMaterial(getItem())) + " for " +iConomy.format(totalSale));
 					return true;
 	    		}
 	    		if (commandName.equalsIgnoreCase("gsbuy")){
@@ -189,9 +195,14 @@ public class GoldStandard extends JavaPlugin{
 		    				player.sendMessage(ChatColor.RED.toString() +"Yeah...right.");
 		    				return true;
 		    			}
-		    			if (amt*calc.getWorth() > iConomy.getBank().getAccount(player.getName()).getBalance()){
+						Holdings holdings = iConomy.getAccount(player.getName()).getHoldings();
+						if (holdings == null){
+							player.sendMessage(ChatColor.RED.toString() + "An error occurred while retrieving your holdings :(");
+							return true;
+						}
+		    			if (amt*calc.getWorth() > holdings.balance()){
 		    				player.sendMessage(ChatColor.RED.toString() +"Insufficient Funds");
-		    				player.sendMessage(ChatColor.RED.toString() + amt+" "+ formatMaterialName(Material.getMaterial(getItem())) + " would cost "+df.format(amt*calc.getWorth())+" "+iConomy.getBank().getCurrency());
+		    				player.sendMessage(ChatColor.RED.toString() + amt+" "+ formatMaterialName(Material.getMaterial(getItem())) + " would cost "+iConomy.format(amt*calc.getWorth()));
 		    				return true;
 		    			}
 		    			double totalSale = 0.0;
@@ -202,8 +213,8 @@ public class GoldStandard extends JavaPlugin{
 						ItemStack tis = new ItemStack(getItem(),amt);
 						stuff.addItem(tis);
 						getCalc().addEntryNI(-amt,player.getName());//add negative transaction to gslog without decrimating the transactions counter
-						iConomy.getBank().getAccount(player.getName()).add(-totalSale); //take their money
-						player.sendMessage(ChatColor.GREEN.toString() + "Bought "+amt+" "+ formatMaterialName(Material.getMaterial(getItem())) + " for " +df.format(totalSale)+ " "+ iConomy.getBank().getCurrency());
+						holdings.add(-totalSale); //take their money
+						player.sendMessage(ChatColor.GREEN.toString() + "Bought "+amt+" "+ formatMaterialName(Material.getMaterial(getItem())) + " for " +iConomy.format(totalSale));
 						return true;
 	    			}
 	    		}
@@ -280,17 +291,6 @@ public class GoldStandard extends JavaPlugin{
     	return protection;
     }
     public static Server getBukkitServer() {
-        return Server;
-    }
-    public static iConomy getiConomy() {
-        return iConomy;
-    }
-    public static boolean setiConomy(iConomy plugin) {
-        if (iConomy == null) {
-            iConomy = plugin;
-        } else {
-            return false;
-        }
-        return true;
+        return bukkitServer;
     }
 }
