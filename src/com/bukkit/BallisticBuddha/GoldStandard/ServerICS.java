@@ -19,7 +19,7 @@ public class ServerICS extends ServerListener {
 
     @Override
     public void onPluginDisable(PluginDisableEvent event) {
-        if (plugin.iConomy != null) {
+    	if (plugin.iConomy != null) {
             if (event.getPlugin().getDescription().getName().equals("iConomy")) {
                 plugin.iConomy = null;
                 System.out.println("[GoldStandard] un-hooked from iConomy.");

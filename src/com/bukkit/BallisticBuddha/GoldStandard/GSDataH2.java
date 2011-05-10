@@ -178,4 +178,10 @@ public class GSDataH2 extends GSData {
 		}
 		return false;
 	}
+	@Override
+	public void closeSession() {
+		synchronized(CalcLock){
+			SQLUtils.closeQuietly(conn);
+		}
+	}
 }

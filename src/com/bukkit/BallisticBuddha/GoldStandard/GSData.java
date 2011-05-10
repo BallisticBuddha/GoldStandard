@@ -56,6 +56,7 @@ public abstract class GSData {
 	public abstract void clear();
 	public abstract void clearOld();
 	public abstract boolean needsCleaning();
+	public abstract void closeSession();
 	
 	
 }

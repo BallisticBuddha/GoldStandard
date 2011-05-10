@@ -56,6 +56,7 @@ public class GoldStandard extends JavaPlugin{
 	private List<String> sellMethods = new ArrayList<String>();
 	private GSCalc calc = null;
 	private Configuration config = new Configuration(new File("plugins/GoldStandard/config.yml"));
+	private Configuration itemConfig = new Configuration(new File("plugins/GoldStandard/items.yml"));
 	public static PermissionHandler Permissions = null;
 	private int CleanseTask;
 	private String protectSystem;
@@ -65,7 +66,8 @@ public class GoldStandard extends JavaPlugin{
 	
 	@Override
 	public void onDisable() {
-		this.getServer().getScheduler().cancelTask(CleanseTask);
+		stopCleanseThread();
+		calc.closeDBSession();
 		log.info("Gold Standard Disabled!");
 	}
 	@Override
@@ -76,6 +78,7 @@ public class GoldStandard extends JavaPlugin{
         pm.registerEvent(Type.PLUGIN_ENABLE, new ServerICS(this), Priority.Monitor, this);
         pm.registerEvent(Type.PLUGIN_DISABLE, new ServerICS(this), Priority.Monitor, this);
         config.load();
+        itemConfig.load();
         calc = new GSCalc (this);
         PluginDescriptionFile pdfFile = this.getDescription();
         sellItem = config.getInt("Item", 266);
@@ -255,6 +258,9 @@ public class GoldStandard extends JavaPlugin{
 			log.info("[GoldStandard] An invalid protection system was specified, block protection is disabled.");
 			protectSystem = "None";
 		}		
+	}
+	public void stopCleanseThread(){
+		this.getServer().getScheduler().cancelTask(CleanseTask);
 	}
     //Organization stuff goes here
     public GSCalc getCalc(){

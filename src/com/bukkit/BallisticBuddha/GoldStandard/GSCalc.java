@@ -80,4 +80,9 @@ public class GSCalc {
 	public String getSystem(){
 		return system;
 	}
+	public void closeDBSession(){
+		if (this.system.equalsIgnoreCase("none"))
+			return;
+		data.closeSession();
+	}
 }

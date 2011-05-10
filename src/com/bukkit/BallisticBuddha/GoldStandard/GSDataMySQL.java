@@ -173,4 +173,10 @@ public class GSDataMySQL extends GSData{
 		}
 		return false;
 	}
+	@Override
+	public void closeSession() {
+		synchronized(CalcLock){
+			SQLUtils.closeQuietly(conn);
+		}
+	}
 }
