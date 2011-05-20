@@ -1,6 +1,6 @@
 name: GoldStandard
 main: com.bukkit.BallisticBuddha.GoldStandard.GoldStandard
-version: 0.7.2
+version: 0.8
 author: BallisticBuddha
 commands:
   gsworth:
@@ -18,10 +18,20 @@ commands:
         - gsell
     description: Sell a specified number of the item directly from your inventory
     usage: |
-           /gssell <amount>
+           /gssell <amount>[option]
+              (append a ~ to the number to include blocks in the sale)
+              (or * to get your "change" in blocks)
+               e.g. /gssell 20~
   gsbuy:
       aliases: 
           - gbuy
       description: Buy the specified amount of gold
       usage: |
              /gsbuy <amount>
+  gshistory:
+      aliases: 
+          - ghistory
+      description: Displays history of GoldStandard transactions (defaults to net)
+      usage: |
+             /gshistory <itemID> [sales(+)|purchases(-)|net(blank)]
+                 (you can subsitute the type word with the symbol)
