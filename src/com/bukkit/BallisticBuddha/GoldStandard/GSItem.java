@@ -19,7 +19,7 @@ public class GSItem extends ItemStack {
 	private double ratio;
 	private boolean allowBlock;
 	private boolean buyBack;
-	
+	public double worth;//actual going price of the item
 	/**
 	 * Constructor for Base and Independent items
 	 * 
@@ -43,6 +43,7 @@ public class GSItem extends ItemStack {
 		this.ratio = ratio;
 		this.allowBlock = allowBlock;
 		this.buyBack = bb;
+		this.worth = price;//initial price of base and ind items
 	}
 	
 	/** Constructor for Relative and Fixed items

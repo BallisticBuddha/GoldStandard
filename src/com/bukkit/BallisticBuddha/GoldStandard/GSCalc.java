@@ -1,5 +1,6 @@
 package com.bukkit.BallisticBuddha.GoldStandard;
 
+import java.util.TreeMap;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
@@ -14,7 +15,6 @@ import com.bukkit.BallisticBuddha.GoldStandard.Data.*;
 public class GSCalc {
 	
 	private GSData data = null;
-	private double worth = 0;
 	private String system;
 	private GoldStandard gs = null;
 	protected static Logger log = Logger.getLogger("Minecraft");
@@ -24,33 +24,50 @@ public class GSCalc {
 		this.system = this.gs.getConfig().getString("Data","none");
 		
 		if (system.equalsIgnoreCase("none")){
-			this.worth =  gs.getBaseItem().getPrice();
+			this.data = null;
+			gs.getBaseItem().worth = gs.getBaseItem().getPrice();
 			log.info("[GoldStandard] Using static pricing.");
 		}
 		else if (system.equalsIgnoreCase("mysql")){
 			this.data = new GSDataMySQL();
-			this.calculate();
+			this.calculate(gs.getBaseItem());
 			log.info("[GoldStandard] MySQL driver loaded.");
 		}
 		else if (system.equalsIgnoreCase("h2sql") || system.equalsIgnoreCase("h2")){
 			this.data = new GSDataH2();
-			this.calculate();
+			this.calculate(gs.getBaseItem());
 			log.info("[GoldStandard] H2 driver loaded.");
 		}
 	}
-	private void calculate(){
-		double val = (data.getBase() - (data.getTransactions() * data.getRatio()));
-		if (val < data.getMin())
-			this.worth = data.getMin();
-		else if (val > data.getMax())
-			this.worth = data.getMax();
+	private double getStaticPrice(GSItem gsi){
+		if (gsi.getGSType() == GSItem.GSType.relative)
+			return gs.getBaseItem().getPrice() * gsi.getRelation();
 		else
-			this.worth = val;
+			return gsi.getPrice();
 	}
-	public double getWorth(){
+	private void calculate(GSItem gsi){
+		if (gsi.getGSType() == GSItem.GSType.base)
+			calculateBase(gsi);
+		else if (gsi.getGSType() == GSItem.GSType.base)
+			calculateRelative(gsi);
+	}
+	private void calculateBase(GSItem gsi){
+		double val = (gsi.getPrice() - (data.getTransactions() * gsi.getRatio()));
+		if (val < data.getMin())
+			gsi.worth = gsi.getMin();
+		else if (val > gsi.getMax())
+			gsi.worth = gsi.getMax();
+		else
+			gsi.worth = val;		
+	}
+	private void calculateRelative(GSItem gsi){
+		calculateBase(gs.getBaseItem());
+		double val = gs.getBaseItem().worth * gsi.getRelation();
+	}
+	public double getWorth(GSItem gsi){
 		if (!this.system.equalsIgnoreCase("none"))
-			this.calculate();		
-		return this.worth;
+			calculate(gsi);		
+		return gsi.worth;
 	}
 	public void clear(){
 		if (this.system.equalsIgnoreCase("none"))

@@ -62,7 +62,6 @@ public class GoldStandard extends JavaPlugin{
 	private ContainerProtect protection;
 	//private Updater updater;
 	//public final HashMap<Player, ArrayList<Block>> gsUsers = new HashMap<Player, ArrayList<Block>>();
-	
 	@Override
 	public void onDisable() {
 		stopCleanseThread();
@@ -111,7 +110,7 @@ public class GoldStandard extends JavaPlugin{
 	    	    	}
 	    			player.sendMessage(ChatColor.YELLOW.toString() +"The current going price of "+ 
 	    					getGSItem(getBaseItem().getTypeId()).getNickname() +
-	    					" is "+iConomy.format(this.getCalc().getWorth()));
+	    					" is "+iConomy.format(this.getCalc().getWorth(getBaseItem())));
 	    			return true;
 	    		}
 	    		if (commandName.equalsIgnoreCase("gsclear")){
@@ -301,6 +300,7 @@ public class GoldStandard extends JavaPlugin{
 	        		break;
         	}
         }
+        log.info("[GoldStandard] Loaded "+items.size()+" items.");
 	}
 	/** Gets the GSItem of a valid sellable item by it's itemID. If the item is not valid, returns 0
 	 * 
@@ -316,7 +316,7 @@ public class GoldStandard extends JavaPlugin{
 	 * @return the itemID of a valid item's 
 	 */
 	public GSItem getGSItem(String nickname){
-		//TODO: This search does not take advantage of TreeMap's O(logn) time, figure out a way to do so.
+		//TODO: This search does not take advantage of TreeMap's O(logn) time
 		for (GSItem gsi : items.values()){
 			if (gsi.getNickname().equalsIgnoreCase(nickname))
 				return gsi;
@@ -340,9 +340,6 @@ public class GoldStandard extends JavaPlugin{
     public int getSellTool(){
     	return this.sellTool;
     }
-//    public boolean getBuyback(){
-//    	return this.buybackEnabled;
-//    }
     public boolean chestMode(){
     	return sellMethods.containsAll(Collections.singleton("chest"));
     }

@@ -25,10 +25,10 @@
 			 <attribute name="Manifest-Version"
 			     value="1.0" />
 			 <attribute name="Class-Path"
-			     value="../lib/mysql-connector-java-bin.jar" />
+			     value="../lib/mysql.jar ../lib/h2.jar ../lib/trove-3.jar" />
 		  </manifest>
       	<copy todir="build" includeEmptyDirs="yes" verbose="true">
-        	<fileset dir="." >
+        	<fileset dir="src">
       			<include name="**/plugin.yml" />
       		</fileset>
         </copy> 
@@ -43,16 +43,11 @@
 	    </target>
 
 	   <target name="move" depends="makejar">
-	    <move todir="server\plugins" includeEmptyDirs="yes" verbose="true" overwrite="true">
+	    <move todir="server/plugins" includeEmptyDirs="yes" verbose="true" overwrite="true">
 	        <fileset dir="dist" >
 	                <include name="**/*" />
 	        </fileset>
 	    </move>
-	   	<copy todir="Z:\sda1\minecraft\three\plugins" includeEmptyDirs="yes" verbose="true" overwrite="true">
-	   		        <fileset dir="server\plugins" >
-	   		                <include name="**/GoldStandard.jar" />
-	   		        </fileset>
-	    </copy>
 	   </target>
 
 	   <target name="clean" depends="move">
