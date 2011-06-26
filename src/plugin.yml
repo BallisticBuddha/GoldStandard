@@ -1,0 +1,64 @@
+name: GoldStandard
+main: com.bukkit.BallisticBuddha.GoldStandard.GoldStandard
+version: 1.0
+author: BallisticBuddha
+commands:
+  gsworth:
+    aliases: gsprice
+    description: Checks the current price of said items
+    usage: |
+           /gsworth <items> (comma seperated)
+  gsclear:
+    aliases: gsreset
+    description: Resets the price of all items (clears all transaction records)
+    usage: |
+           /gsclear
+  gssell:
+    aliases: 
+        - gsell
+    description: Sell a specified number of the item directly from your inventory
+    usage: |
+           /gssell <items> <quantities>[option] (comma sperate items and quantities)
+              (append a ~ to the number to include blocks in the sale)
+              (or * to get your "change" in blocks)
+               e.g. /gssell 20~
+  gsbuy:
+      aliases: 
+          - gbuy
+      description: Buy the specified amount of said item
+      usage: |
+             /gsbuy <items> <quantities> (comma sperate items and quantities)
+  gshistory:
+      aliases: 
+          - ghistory
+      description: Displays history of GoldStandard transactions (defaults to net)
+      usage: |
+             /gshistory <itemID> [sales(+)|purchases(-)|net(blank)]
+                 (you can subsitute the type word with the symbol)
+  gsadd:
+      aliases: 
+          - gsa
+      description: Add the specified items to your sell list
+      usage: |
+             /gsadd <items>
+                 (comma seperate items & qtys for the sell list)
+  gsremove:
+      aliases: 
+          - gsr
+      description: Remove the specified items from your sell list
+      usage: |
+             /gsremove <items> 
+                 (comma seperate items for the sell list)
+  gsset:
+      aliases:
+          - gss
+      description: Reset your buy item and amount
+      usage: |
+             /gsset <item> <quantity>
+                 (comma seperate items for the sell list)
+  gslist:
+      aliases: 
+          - gsl
+      description: List the items in your sell list, or show your buy item
+      usage: |
+             /gslist <buy|sell>
