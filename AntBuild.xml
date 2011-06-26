@@ -1,0 +1,57 @@
+<project name="Gold Standard Package" default="clean" basedir=".">
+
+     <property name="root.project.name" value="Gold Standard"/>
+     <property name="test.class" value="GoldStandard"/>
+	
+	 <property name="jar.module" value="GoldStandard.jar"/>
+
+	    <path id="test.classpath">
+	        <pathelement location="dist/${jar.module}"/>
+	        <pathelement location="dist/test.jar"/>
+	    </path>
+
+	   <target name="compile">
+	      <mkdir dir="build"/>
+	      <javac destdir="build"
+	             debug="on"
+	             optimize="on">
+	         <src path="src"/>
+	      </javac>
+	   </target>
+
+	   <target name="makejar" depends="compile">
+	      <mkdir dir="dist"/>
+		  <manifest file="build/MANIFEST.MF">
+			 <attribute name="Manifest-Version"
+			     value="1.0" />
+			 <attribute name="Class-Path"
+			     value="../lib/mysql.jar ../lib/h2.jar ../lib/trove-3.jar" />
+		  </manifest>
+      	<copy todir="build" includeEmptyDirs="yes" verbose="true">
+        	<fileset dir="src">
+      			<include name="**/plugin.yml" />
+      		</fileset>
+        </copy> 
+	      <jar jarfile="dist/${jar.module}"
+	      	manifest="build/MANIFEST.MF">
+	      	<fileset dir="build">
+	             <include name="**/*.class"/>
+	         	 <include name="**/plugin.yml"/>
+	      <exclude name="test/*.class"/>
+	         </fileset>
+	       </jar>
+	    </target>
+
+	   <target name="move" depends="makejar">
+	    <move todir="server/plugins" includeEmptyDirs="yes" verbose="true" overwrite="true">
+	        <fileset dir="dist" >
+	                <include name="**/*" />
+	        </fileset>
+	    </move>
+	   </target>
+
+	   <target name="clean" depends="move">
+	      <delete dir="build"/>
+	      <delete dir="dist"/>
+	   </target>
+</project>
