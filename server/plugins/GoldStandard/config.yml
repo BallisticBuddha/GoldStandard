@@ -1,0 +1,22 @@
+SellTool: 283
+Duration: 3
+Reload Interval: 60
+Permissions: true
+Allow Block: true
+Buyback: false
+Cooldown:
+    Sell: 5000 #5 seconds
+    Buy: 5000
+    Ops obey: true
+SellMethods:
+    - Furnace
+    - Chest
+    - Command
+Protection: LWC
+Data: MySQL
+MySQL:
+    database: minecraft
+    hostname: localhost
+    port: 3306
+    username: mc
+    password: pass

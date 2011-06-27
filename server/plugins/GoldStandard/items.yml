@@ -1,0 +1,22 @@
+Items:
+    Gold: 
+        Id: 266
+        Allow Block: true
+        Buyback: true
+        Type: base
+        Price: 150
+        Minimum: 50
+        Maximum: 200
+        Ratio: .1
+    Iron:
+        Id: 265
+        Allow Block: false
+        Buyback: true
+        Type: relative
+        Relation: .5
+    Diamond:
+        Id: 267
+        Allow Block: true
+        Buyback: false
+        Type: relative
+        Relation: 10

@@ -1,0 +1,54 @@
+core:
+    locale: en
+    autoUpdate: false
+    flushInterval: 10
+    cacheSize: 10000
+    defaultMenuStyle: basic
+    showNotices: true
+    showMyNotices: false
+    verbose: false
+    opIsLWCAdmin: true
+
+database:
+    adapter: sqlite
+    path: plugins/LWC/lwc.db
+    host: localhost
+    database: lwc
+    username:
+    password:
+    prefix:
+
+protections:
+    denyRedstone: false
+    autoRegister: off
+    ignoreBlockDestruction: false
+    ignoreLeftClick: false
+    ignoreRightClick: false
+    blocks:
+        chest:
+            enabled: true
+            autoRegister: private
+        furnace:
+            enabled: true
+            autoRegister: private
+        dispenser:
+            enabled: true
+            autoRegister: private
+        sign:
+            enabled: true
+            autoRegister: private
+        wooden_door:
+            enabled: true
+            autoRegister: off
+        iron_door:
+            enabled: true
+            autoRegister: off
+        trap_door:
+            enabled: true
+            autoRegister: off
+
+modes:
+    droptransfer:
+        enabled: true
+    persist:
+        enabled: true

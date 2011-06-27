@@ -1,0 +1,24 @@
+06-27 13:00:39 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Syntax error in SQL statement "CREATE TABLE IF NOT EXISTS ""GSUSERS"" (""PKGSUSERS"" INT UNSIGNED NOT NULL AUTO_INCREMENT ,""USERNAME"" VARCHAR(45) NOT NULL DEFAULT 'foobar' ,""BUYITEM"" INT UNSIGNED NOT NULL DEFAULT 0 ,""BUYQTY"" INT UNSIGNED NOT NULL DEFAULT 1 ,""SELLITEMS"" VARCHAR(45) NOT NULL DEFAULT '' ,""LASTBOUGHT"" TIMESTAMP NOT NULL DEFAULT '1970-01-01 00:00:00',""LASTSOLD"" TIMESTAMP NOT NULL DEFAULT '1970-01-01 00:00:00',PRIMARY KEY (""PKGSUSERS"") ,UNIQUE INDEX ""NAME_UNIQUE"" (""USERNAME"" ASC)) ENGINE =[*] INNODB DEFAULT CHARACTER SET = LATIN1 "; expected "identifier"; SQL statement:
+CREATE TABLE IF NOT EXISTS `gsusers` (`pkgsusers` INT UNSIGNED NOT NULL AUTO_INCREMENT ,`username` VARCHAR(45) NOT NULL DEFAULT 'foobar' ,`buyItem` INT UNSIGNED NOT NULL DEFAULT 0 ,`buyQty` INT UNSIGNED NOT NULL DEFAULT 1 ,`sellItems` VARCHAR(45) NOT NULL DEFAULT '' ,`lastBought` TIMESTAMP NOT NULL DEFAULT '1970-01-01 00:00:00',`lastSold` TIMESTAMP NOT NULL DEFAULT '1970-01-01 00:00:00',PRIMARY KEY (`pkgsusers`) ,UNIQUE INDEX `name_UNIQUE` (`username` ASC)) ENGINE = InnoDB DEFAULT CHARACTER SET = latin1 [42001-153]
+06-27 13:00:39 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Table "GSLOG" not found; SQL statement:
+SELECT amount from gslog where item = ? [42102-153]
+06-27 13:00:39 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Table "GSLOG" not found; SQL statement:
+SELECT amount from gslog where item = ? [42102-153]
+06-27 13:00:39 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Table "GSLOG" not found; SQL statement:
+SELECT amount from gslog where item = ? [42102-153]
+06-27 13:02:33 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Syntax error in SQL statement "CREATE TABLE IF NOT EXISTS ""GSUSERS"" (""PKGSUSERS"" INT UNSIGNED NOT NULL AUTO_INCREMENT ,""USERNAME"" VARCHAR(45) NOT NULL DEFAULT 'foobar' ,""BUYITEM"" INT UNSIGNED NOT NULL DEFAULT 0 ,""BUYQTY"" INT UNSIGNED NOT NULL DEFAULT 1 ,""SELLITEMS"" VARCHAR(45) NOT NULL DEFAULT '' ,""LASTBOUGHT"" TIMESTAMP NOT NULL DEFAULT '1970-01-01 00:00:00',""LASTSOLD"" TIMESTAMP NOT NULL DEFAULT '1970-01-01 00:00:00',PRIMARY KEY (""PKGSUSERS"") ,UNIQUE INDEX ""NAME_UNIQUE"" (""USERNAME"" ASC)) ENGINE =[*] INNODB DEFAULT CHARACTER SET = LATIN1 "; expected "identifier"; SQL statement:
+CREATE TABLE IF NOT EXISTS `gsusers` (`pkgsusers` INT UNSIGNED NOT NULL AUTO_INCREMENT ,`username` VARCHAR(45) NOT NULL DEFAULT 'foobar' ,`buyItem` INT UNSIGNED NOT NULL DEFAULT 0 ,`buyQty` INT UNSIGNED NOT NULL DEFAULT 1 ,`sellItems` VARCHAR(45) NOT NULL DEFAULT '' ,`lastBought` TIMESTAMP NOT NULL DEFAULT '1970-01-01 00:00:00',`lastSold` TIMESTAMP NOT NULL DEFAULT '1970-01-01 00:00:00',PRIMARY KEY (`pkgsusers`) ,UNIQUE INDEX `name_UNIQUE` (`username` ASC)) ENGINE = InnoDB DEFAULT CHARACTER SET = latin1 [42001-153]
+06-27 13:02:33 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Table "GSLOG" not found; SQL statement:
+SELECT amount from gslog where item = ? [42102-153]
+06-27 13:02:33 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Table "GSLOG" not found; SQL statement:
+SELECT amount from gslog where item = ? [42102-153]
+06-27 13:02:33 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Table "GSLOG" not found; SQL statement:
+SELECT amount from gslog where item = ? [42102-153]

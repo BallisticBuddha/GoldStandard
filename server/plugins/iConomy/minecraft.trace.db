@@ -1,0 +1,15 @@
+06-27 13:00:39 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Table "ICONOMY" already exists; SQL statement:
+CREATE TABLE iConomy(id INT auto_increment PRIMARY KEY,username VARCHAR(32) UNIQUE,balance DECIMAL (64, 2),hidden BOOLEAN DEFAULT '0'); [42101-153]
+06-27 13:02:33 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Table "ICONOMY" already exists; SQL statement:
+CREATE TABLE iConomy(id INT auto_increment PRIMARY KEY,username VARCHAR(32) UNIQUE,balance DECIMAL (64, 2),hidden BOOLEAN DEFAULT '0'); [42101-153]
+06-27 13:35:12 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Table "ICONOMY" already exists; SQL statement:
+CREATE TABLE iConomy(id INT auto_increment PRIMARY KEY,username VARCHAR(32) UNIQUE,balance DECIMAL (64, 2),hidden BOOLEAN DEFAULT '0'); [42101-153]
+06-27 14:29:06 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Table "ICONOMY" already exists; SQL statement:
+CREATE TABLE iConomy(id INT auto_increment PRIMARY KEY,username VARCHAR(32) UNIQUE,balance DECIMAL (64, 2),hidden BOOLEAN DEFAULT '0'); [42101-153]
+06-27 15:18:39 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Table "ICONOMY" already exists; SQL statement:
+CREATE TABLE iConomy(id INT auto_increment PRIMARY KEY,username VARCHAR(32) UNIQUE,balance DECIMAL (64, 2),hidden BOOLEAN DEFAULT '0'); [42101-153]
