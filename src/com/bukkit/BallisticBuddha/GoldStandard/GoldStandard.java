@@ -43,7 +43,6 @@ import org.bukkit.util.config.Configuration;
 	
 */
 public class GoldStandard extends JavaPlugin{
-	
 	private final GSPlayerListener playerListener = new GSPlayerListener(this);
 	private final GSBlockListener blockListener = new GSBlockListener(this);
 	private static final Pattern positiveInt = Pattern.compile("^\\d+$");
@@ -383,42 +382,22 @@ public class GoldStandard extends JavaPlugin{
 			else if (commandName.equals("gsset")){
 				if (args.length < 2)
 					return false;
-				if (isPositiveInt(args[0])){
-					GSItem gsi = getGSItem(Integer.parseInt(args[1]));
-					if (gsi != null){
-						if (gsi.canBeBought()){
-							if (isPositiveInt(args[1])){
-								getCalc().getPlayer(player.getName()).setBuyItem(gsi.getTypeId());
-								getCalc().getPlayer(player.getName()).setBuyQty(Integer.parseInt(args[1]));
-								displayItemList(player, true);
-							}
-							else
-								player.sendMessage(ChatColor.RED.toString() + args[1]+ " is not a valid quantity.");
+				GSItem gsi = parseGSItem(args[1]);
+				if (gsi != null){
+					if (gsi.canBeBought()){
+						if (isPositiveInt(args[1])){
+							getCalc().getPlayer(player.getName()).setBuyItem(gsi.getTypeId());
+							getCalc().getPlayer(player.getName()).setBuyQty(Integer.parseInt(args[1]));
+							displayItemList(player, true);
 						}
 						else
-							player.sendMessage(ChatColor.RED.toString() + gsi.getNickname()+ " cannot be bought.");
+							player.sendMessage(ChatColor.RED.toString() + args[1]+ " is not a valid quantity.");
 					}
-					else
-						player.sendMessage(ChatColor.RED.toString() + args[0] + " Is not a valid item.");
-				}
-				else{
-					GSItem gsi = getGSItem(args[0]);
-					if (gsi != null){
-						if (gsi.canBeBought()){
-							if (isPositiveInt(args[1])){
-								getCalc().getPlayer(player.getName()).setBuyItem(gsi.getTypeId());
-								getCalc().getPlayer(player.getName()).setBuyQty(Integer.parseInt(args[1]));
-								displayItemList(player, true);
-							}
-							else
-								player.sendMessage(ChatColor.RED.toString() + args[1]+ " is not a valid quantity.");
-						}
-						else
+				else
 							player.sendMessage(ChatColor.RED.toString() + gsi.getNickname()+ " cannot be bought.");
-					}
-					else
-						player.sendMessage(ChatColor.RED.toString() + args[0] + " Is not a valid item.");
 				}
+				else
+					player.sendMessage(ChatColor.RED.toString() + args[0] + " Is not a valid item.");
 				return true;
 			}
 	    	else if (commandName.equalsIgnoreCase("gslist")){
