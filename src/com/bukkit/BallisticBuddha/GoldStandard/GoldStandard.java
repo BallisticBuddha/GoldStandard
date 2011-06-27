@@ -381,7 +381,7 @@ public class GoldStandard extends JavaPlugin{
 			else if (commandName.equals("gsset")){
 				if (args.length < 2)
 					return false;
-				GSItem gsi = parseGSItem(args[1]);
+				GSItem gsi = parseGSItem(args[0]);
 				if (gsi != null){
 					if (gsi.canBeBought()){
 						if (isPositiveInt(args[1])){
@@ -423,10 +423,13 @@ public class GoldStandard extends JavaPlugin{
     public boolean hasPermissions(Player p, String s) {
         if (!usePermissions && !s.equalsIgnoreCase("goldstandard.clear"))
         	return true;
-        else if (Permissions != null)
-            return Permissions.has(p, s); 
-        else
-            return p.isOp();
+        else if (Permissions != null){
+            if (p.isOp())
+            	return true;
+            else
+            	return Permissions.has(p, s);        	
+        }
+        return p.isOp();
     }
 	private void setupProtection(){
 		protectSystem = getConfig().getString("Protection","none");
