@@ -362,7 +362,6 @@ public class GoldStandard extends JavaPlugin{
 			else if (commandName.equalsIgnoreCase("gsremove")){
 				if (args.length != 1)
 					return false;
-				
 				TIntArrayList itms = new TIntArrayList();
 				String[] itemStrings = args[0].split(",");
 				for (String itm : itemStrings){
