@@ -373,4 +373,33 @@ public class GSDataMySQL extends GSData{
 			}
 		}
 	}
+	@Override
+	public void storePlayerND(String name) {
+		if (!playerData.containsKey(name)){
+			log.severe("[GoldStandard] Could not store user"+name+". Player was not loaded into memory!");
+			return;
+		}
+		GSPlayer gsp = playerData.get(name);
+		synchronized(CalcLock){
+			PreparedStatement stmt = null;
+			try{
+				stmt = conn.prepareStatement("INSERT INTO gsusers (username,buyItem,buyQty,sellItems,lastBought,lastSold) VALUES (?,?,?,?,?,?) " +
+						"ON DUPLICATE KEY UPDATE buyItem=?, buyQty=?, sellItems=?, lastBought=?, lastSold=?");
+				stmt.setString(1, name);
+				stmt.setInt(2, gsp.getBuyItem());/**/stmt.setInt(7, gsp.getBuyItem());
+				stmt.setInt(3, gsp.getBuyQty());/**/stmt.setInt(8, gsp.getBuyQty());
+				stmt.setString(4, gsp.getSellItems());/**/stmt.setString(9, gsp.getSellItems());
+				stmt.setTimestamp(5, new Timestamp(gsp.getLastBought()));/**/stmt.setTimestamp(10, new Timestamp(gsp.getLastBought()));
+				stmt.setTimestamp(6, new Timestamp(gsp.getLastSold()));/**/stmt.setTimestamp(11, new Timestamp(gsp.getLastSold()));
+				//stmt.setInt(12, gsp.getId());
+				stmt.executeUpdate();
+			}
+			catch(SQLException ex){
+				log.severe("[GoldStandard] Error when storing user " + name + "\n" +ex);
+			}
+			finally{
+				SQLUtils.closeQuietly(stmt);
+			}
+		}
+	}
 }

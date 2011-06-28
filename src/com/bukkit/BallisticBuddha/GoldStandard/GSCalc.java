@@ -186,6 +186,9 @@ public class GSCalc {
 	public void storePlayer(String name){
 		data.storePlayer(name);
 	}
+	public void storePlayerND(String name){
+		data.storePlayerND(name);
+	}
 	public GSPlayer getPlayer(String name){
 		return data.getPlayer(name);
 	}

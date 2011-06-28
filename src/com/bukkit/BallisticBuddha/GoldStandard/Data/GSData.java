@@ -138,6 +138,7 @@ public abstract class GSData {
 	public abstract boolean loadPlayer(String name);
 	public abstract void addPlayer(String name);
 	public abstract void storePlayer(String name);
+	public abstract void storePlayerND(String name);
 	public GSPlayer getPlayer(String name){
 		return playerData.get(name);
 	}

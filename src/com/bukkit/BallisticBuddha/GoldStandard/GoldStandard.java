@@ -455,8 +455,7 @@ public class GoldStandard extends JavaPlugin{
             	if (calc.needsCleaning())
             		calc.clearOld();
             	for (String pName : calc.getPlayers()){
-                	getCalc().storePlayer(pName);
-                	getCalc().loadPlayer(pName);
+                	getCalc().storePlayerND(pName);
             	}
             }
         }, 60 * 20L, reloadInterval*60 * 20L );
