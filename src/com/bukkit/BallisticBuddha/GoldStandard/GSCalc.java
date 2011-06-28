@@ -193,6 +193,11 @@ public class GSCalc {
 		return data.getPlayer(name);
 	}
 	public long timeSinceBought(Player player){
+		if (data.getPlayer(player.getName()) == null){
+			System.out.println("ERROR, a null player is trying to buy something");
+			return 0;
+		}
+		System.out.println();
 		long diff = (System.currentTimeMillis() - data.getPlayer(player.getName()).getLastBought());
 		if (!gs.opsObeyCooldown() && player.isOp())
 			return gs.getBuyCooldown();
@@ -200,6 +205,10 @@ public class GSCalc {
 			return diff;
 	}
 	public long timeSinceSold(Player player){
+		if (data.getPlayer(player.getName()) == null){
+			System.out.println("ERROR, a null player is trying to sell something");
+			return 0;
+		}
 		long diff = (System.currentTimeMillis() - data.getPlayer(player.getName()).getLastSold());
 		if (!gs.opsObeyCooldown() && player.isOp())
 			return gs.getSellCooldown();
