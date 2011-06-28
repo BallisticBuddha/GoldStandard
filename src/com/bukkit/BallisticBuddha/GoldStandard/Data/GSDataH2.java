@@ -1,5 +1,7 @@
 package com.bukkit.BallisticBuddha.GoldStandard.Data;
 
+import gnu.trove.list.array.TIntArrayList;
+
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,6 +13,7 @@ import java.util.Iterator;
 
 import com.bukkit.BallisticBuddha.GoldStandard.GSItem;
 import com.bukkit.BallisticBuddha.GoldStandard.GSPlayer;
+import com.bukkit.BallisticBuddha.GoldStandard.Data.GSData.SumCount;
 
 /**
  * Class for handling all H2SQL backend tasks
@@ -72,8 +75,7 @@ public class GSDataH2 extends GSData {
 		}
 	}
 	public int countTransactions(String itemID){
-		ArrayList<Integer> ar = new ArrayList<Integer>();
-		int toRet = 0;
+		TIntArrayList ar = new TIntArrayList();
 		synchronized (CalcLock){
 			PreparedStatement stmt = null;
 			ResultSet rs = null;
@@ -98,10 +100,9 @@ public class GSDataH2 extends GSData {
 				SQLUtils.closeQuietly(stmt);
 			}
 		}
-		for (int i : ar){
-			toRet += i;
-		}
-		return toRet;
+		SumCount countAll = new SumCount();
+		ar.forEach(countAll);
+		return countAll.getSum();
 	}
 	@Override
 	public void addEntry(int amt, String usr, int item){

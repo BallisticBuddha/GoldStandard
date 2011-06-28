@@ -68,7 +68,6 @@ public class GSDataMySQL extends GSData{
 	}
 	public int countTransactions(String itemID){
 		TIntArrayList ar = new TIntArrayList();
-		int toRet = 0;
 		synchronized (CalcLock){
 			PreparedStatement stmt = null;
 			ResultSet rs = null;

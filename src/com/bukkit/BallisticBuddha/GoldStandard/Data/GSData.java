@@ -7,13 +7,11 @@ import gnu.trove.procedure.TIntDoubleProcedure;
 import gnu.trove.procedure.TIntProcedure;
 
 import java.sql.Connection;
-import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import org.bukkit.entity.Player;
 import org.bukkit.util.config.Configuration;
 
 import com.bukkit.BallisticBuddha.GoldStandard.GSItem;
@@ -31,8 +29,8 @@ public abstract class GSData {
 		}
 		@Override
 		public boolean execute(int itemId, double relation) {
-			sum += relation * data.getTransactions(itemId); 
-			return false;
+			sum += relation * data.getTransactions(itemId);
+			return true;
 		}
 		//GET SOME!
 		public double getSum(){
@@ -44,7 +42,7 @@ public abstract class GSData {
 		@Override
 		public boolean execute(int entry) {
 			sum += entry;
-			return false;
+			return true;
 		}
 		public int getSum(){
 			return this.sum;
@@ -114,7 +112,8 @@ public abstract class GSData {
 		for (GSItem gsi : gs.getItems().values()){
 			if (gsi.getGSType() == GSItem.GSType.relative)
 				relativeItems.putIfAbsent(gsi.getTypeId(), gsi.getRelation());
-			this.transValues.putIfAbsent(gsi.getTypeId(), countTransactions(Integer.toString(gsi.getTypeId())));
+			int tmp = countTransactions(Integer.toString(gsi.getTypeId()));
+			this.transValues.putIfAbsent(gsi.getTypeId(), tmp);
 		}
 	}
 	protected void setAllToZero(){
