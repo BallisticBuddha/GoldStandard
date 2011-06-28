@@ -17,7 +17,7 @@ public class GSPlayer {
 				theString += theString+","+arg0+(includeBlocks!=0?"~":"");
 			else
 				theString += arg0;
-			return false;
+			return true;
 		}
 		public String getString(){
 			return this.theString;
