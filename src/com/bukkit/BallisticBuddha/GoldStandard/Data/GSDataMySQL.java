@@ -60,7 +60,7 @@ public class GSDataMySQL extends GSData{
 						"KEY `fk_user` (`user`),"+
 						"CONSTRAINT `fk_user` FOREIGN KEY (`user`) REFERENCES `gsusers` (`pkgsusers`) ON DELETE SET NULL ON UPDATE CASCADE"+
 						") ENGINE = InnoDB DEFAULT CHARSET = latin1");
-			}
+				}
 			catch(SQLException ex){
 				log.severe("[GoldStandard] Error when creating gslog." + "\n" +ex);
 			}

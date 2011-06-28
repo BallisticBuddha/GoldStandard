@@ -31,7 +31,7 @@ public class GSDataH2 extends GSData {
 		synchronized(CalcLock){
 			try{
 				Class.forName("org.h2.Driver");
-				String sqlurl = "jdbc:h2:plugins/GoldStandard/gsH2data";
+				String sqlurl = "jdbc:h2:plugins/GoldStandard/gsH2data;MODE=MYSQL";
 				conn = DriverManager.getConnection(sqlurl, config.getString("H2SQL.username","GoldStandard"), config.getString("H2SQL.password","gsP@SSwrd"));
 			}
 		    catch (SQLException ex){
@@ -47,27 +47,26 @@ public class GSDataH2 extends GSData {
 			Statement stmt = null;
 			try{
 				stmt = conn.createStatement();
-				stmt.executeUpdate("CREATE TABLE IF NOT EXISTS `gsusers` ("+
-						"`pkgsusers` INT UNSIGNED NOT NULL AUTO_INCREMENT ,"+
-  						"`username` VARCHAR(45) NOT NULL DEFAULT 'foobar' ,"+
-  						"`buyItem` INT UNSIGNED NOT NULL DEFAULT 0 ,"+
-  						"`buyQty` INT UNSIGNED NOT NULL DEFAULT 1 ,"+
-  						"`sellItems` VARCHAR(45) NOT NULL DEFAULT '' ,"+
-  						"`lastBought` TIMESTAMP NOT NULL DEFAULT '1970-01-01 00:00:00',"+
-  						"`lastSold` TIMESTAMP NOT NULL DEFAULT '1970-01-01 00:00:00',"+
-  						"PRIMARY KEY (`pkgsusers`) ,"+
-  						"UNIQUE INDEX `name_UNIQUE` (`username` ASC)"+
-  						") ENGINE = InnoDB DEFAULT CHARACTER SET = latin1");
-				stmt.executeUpdate("CREATE TABLE IF NOT EXISTS `gslog` ("+
-						"`pkgslog` int(32) unsigned NOT NULL AUTO_INCREMENT,"+
-						"`time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,"+
-						"`amount` int(10) NOT NULL DEFAULT '1',"+
-						"`item` int(10) unsigned DEFAULT NULL,"+
-						"`user` int(10) unsigned DEFAULT NULL,"+
-						"PRIMARY KEY (`pkgslog`),"+
-						"KEY `fk_user` (`user`),"+
-						"CONSTRAINT `fk_user` FOREIGN KEY (`user`) REFERENCES `gsusers` (`pkgsusers`) ON DELETE SET NULL ON UPDATE CASCADE"+
-						") ENGINE = InnoDB DEFAULT CHARSET = latin1");
+				stmt.executeUpdate("CREATE TABLE IF NOT EXISTS GSUSERS"+
+					"(PKGSUSERS INTEGER NOT NULL,"+
+					"USERNAME VARCHAR(45) DEFAULT 'foobar' NOT NULL,"+
+					"BUYITEM INTEGER DEFAULT 0 NOT NULL,"+
+					"BUYQTY INTEGER DEFAULT 1 NOT NULL,"+
+					"SELLITEMS VARCHAR(45) DEFAULT '' NOT NULL,"+
+					"LASTBOUGHT TIMESTAMP DEFAULT '1970-01-01 00:00:00' NOT NULL,"+
+					"LASTSOLD TIMESTAMP DEFAULT '1970-01-01 00:00:00' NOT NULL,"+
+					"PRIMARY KEY (PKGSUSERS),"+
+					"UNIQUE (USERNAME))");
+
+				stmt.executeUpdate("CREATE TABLE IF NOT EXISTS GSLOG"+
+					"(PKGSLOG INTEGER NOT NULL,"+
+					"TIME TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,"+
+					"AMOUNT INTEGER DEFAULT 1 NOT NULL,"+
+					"ITEM INTEGER,"+
+					"USER INTEGER,"+
+					"PRIMARY KEY (PKGSLOG),"+
+					"FOREIGN KEY (USER)"+
+					"REFERENCES GSUSERS(PKGSUSERS) ON UPDATE CASCADE ON DELETE SET NULL)");
 			}
 			catch(SQLException ex){
 				log.severe("[GoldStandard] Error when creating gslog." + "\n" +ex);
