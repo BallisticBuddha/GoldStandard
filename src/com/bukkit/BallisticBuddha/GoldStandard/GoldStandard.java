@@ -368,7 +368,7 @@ public class GoldStandard extends JavaPlugin{
 	    	    	GSItem thisItem = parseGSItem(itm);
 	    	    	if (thisItem != null)
 	    	    		if (getCalc().getPlayer(player.getName()).isInSellList(thisItem.getTypeId())){
-	    	    			itms.remove(thisItem.getTypeId());
+	    	    			itms.add(thisItem.getTypeId());
 	    	    			player.sendMessage(ChatColor.YELLOW.toString() + thisItem.getNickname()+" was removed from you sell list.");
 	    	    		}
 	    	    		else
@@ -376,6 +376,9 @@ public class GoldStandard extends JavaPlugin{
 	    	    	else
     	    			player.sendMessage(ChatColor.RED.toString() + itm+" is not a valid item name or number.");
 				}
+	    		for (int i=0;i<itms.size();i++)
+		   			getCalc().getPlayer(player.getName()).removeSellItem(itms.get(i));
+	    		displayItemList(player, false);
 				return true;
 			}
 			else if (commandName.equals("gsset")){
