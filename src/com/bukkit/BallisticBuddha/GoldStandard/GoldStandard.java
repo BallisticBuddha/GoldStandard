@@ -71,7 +71,9 @@ public class GoldStandard extends JavaPlugin{
 	@Override
 	public void onDisable() {
 		stopCleanseThread();
-		calc.closeDBSession();
+    	for (String pName : calc.getPlayers())
+        	getCalc().storePlayerND(pName);
+    	calc.closeDBSession();
 		log.info("Gold Standard Disabled!");
 	}
 	@Override
@@ -340,19 +342,17 @@ public class GoldStandard extends JavaPlugin{
 	    	    		itms.add(thisItem.getTypeId());
 	    	    		iBlocks.add(false);
 	    	    	}
-	    	    	else{
-	    	    		if (itm.length() > 1){
+	    	    	else if (itm.length() > 1){
 	    	    			GSItem truncItem = parseGSItem(itm.substring(0,itm.length()-1));
 	    	    			if (truncItem != null && itm.charAt(itm.length()-1)=='~'){
 	    	    	    		itms.add(truncItem.getTypeId());
-	    	    	    		iBlocks.add(true);	    	    				
+	    	    	    		iBlocks.add(true);
 	    	    			}
 	    	    			else
 		    	    			player.sendMessage(itm+" is not a valid item name or number.");
-	    	    		}
-	    	    		else
-	    	    			player.sendMessage(itm+" is not a valid item name or number.");
 	    	    	}
+	    	    	else
+	    	    		player.sendMessage(itm+" is not a valid item name or number.");
 	    	    }
 	    		for (int i=0;i<itms.size();i++)
 		   			getCalc().getPlayer(player.getName()).addSellItem(itms.get(i), iBlocks.get(i));
@@ -457,9 +457,8 @@ public class GoldStandard extends JavaPlugin{
 			public void run() {
             	if (calc.needsCleaning())
             		calc.clearOld();
-            	for (String pName : calc.getPlayers()){
+            	for (String pName : calc.getPlayers())
                 	getCalc().storePlayerND(pName);
-            	}
             }
         }, 60 * 20L, reloadInterval*60 * 20L );
 	}
@@ -521,7 +520,7 @@ public class GoldStandard extends JavaPlugin{
 	//Re-inserted to display removed items to players
     public static String formatMaterialName(Material mat){
         String toOut = "";
-        String oldString = mat.name().toLowerCase();
+        String oldString = mat.toString().toLowerCase();
         for (int i=0;i < oldString.length();i++){
         if (oldString.charAt(i) == '_')
         toOut += ' ';
@@ -613,6 +612,7 @@ public class GoldStandard extends JavaPlugin{
 					return;
 			}
 			for (int itemID : getCalc().getPlayer(player.getName()).getSellList().keys()){
+				//System.out.println(itemID);
 				if (!validSale(player,itemID))
 						continue;
 				player.sendMessage(ChatColor.YELLOW.toString() + getGSItem(itemID).getNickname()+

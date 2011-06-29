@@ -44,7 +44,7 @@ public class GSDataMySQL extends GSData{
   						"`username` VARCHAR(45) NOT NULL DEFAULT 'foobar' ,"+
   						"`buyItem` INT UNSIGNED NOT NULL DEFAULT 0 ,"+
   						"`buyQty` INT UNSIGNED NOT NULL DEFAULT 1 ,"+
-  						"`sellItems` VARCHAR(45) NOT NULL DEFAULT '' ,"+
+  						"`sellItems` VARCHAR(160) NOT NULL DEFAULT '' ,"+
   						"`lastBought` TIMESTAMP NOT NULL DEFAULT '1970-01-01 00:00:00',"+
   						"`lastSold` TIMESTAMP NOT NULL DEFAULT '1970-01-01 00:00:00',"+
   						"PRIMARY KEY (`pkgsusers`) ,"+
