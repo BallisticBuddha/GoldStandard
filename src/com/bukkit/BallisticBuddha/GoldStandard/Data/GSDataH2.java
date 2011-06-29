@@ -48,7 +48,7 @@ public class GSDataH2 extends GSData {
 			try{
 				stmt = conn.createStatement();
 				stmt.executeUpdate("CREATE TABLE IF NOT EXISTS GSUSERS"+
-					"(PKGSUSERS INTEGER NOT NULL,"+
+					"(PKGSUSERS INTEGER AUTO_INCREMENT NOT NULL,"+
 					"USERNAME VARCHAR(45) DEFAULT 'foobar' NOT NULL,"+
 					"BUYITEM INTEGER DEFAULT 0 NOT NULL,"+
 					"BUYQTY INTEGER DEFAULT 1 NOT NULL,"+
@@ -59,7 +59,7 @@ public class GSDataH2 extends GSData {
 					"UNIQUE (USERNAME))");
 
 				stmt.executeUpdate("CREATE TABLE IF NOT EXISTS GSLOG"+
-					"(PKGSLOG INTEGER NOT NULL,"+
+					"(PKGSLOG INTEGER AUTO_INCREMENT NOT NULL,"+
 					"TIME TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,"+
 					"AMOUNT INTEGER DEFAULT 1 NOT NULL,"+
 					"ITEM INTEGER,"+
@@ -105,12 +105,13 @@ public class GSDataH2 extends GSData {
 	}
 	@Override
 	public void addEntry(int amt, String usr, int item){
+		int userId = playerData.get(usr).getId();
 		synchronized (CalcLock){
 			PreparedStatement stmt = null;
 			try{
 				stmt = conn.prepareStatement("INSERT INTO gslog (amount,user,item,time) VALUES (?,?,?,?)");
 				stmt.setInt(1, amt);
-				stmt.setString(2, usr.toLowerCase());
+				stmt.setInt(2, userId);
 				stmt.setInt(3, item);
 				stmt.setTimestamp(4, new Timestamp(System.currentTimeMillis()));
 				stmt.execute();
@@ -126,12 +127,13 @@ public class GSDataH2 extends GSData {
 	}
 	@Override
 	public void addEntryNI(int amt, String usr, int item){
+		int userId = playerData.get(usr).getId();
 		synchronized (CalcLock){
 			PreparedStatement stmt = null;
 			try{
 				stmt = conn.prepareStatement("INSERT INTO gslog (amount,user,item,time) VALUES (?,?,?,?)");
 				stmt.setInt(1, amt);
-				stmt.setString(2, usr.toLowerCase());
+				stmt.setInt(2, userId);
 				stmt.setInt(3, item);
 				stmt.setTimestamp(4, new Timestamp(System.currentTimeMillis()));
 				stmt.execute();

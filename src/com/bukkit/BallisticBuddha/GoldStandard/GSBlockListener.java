@@ -1,5 +1,7 @@
 package com.bukkit.BallisticBuddha.GoldStandard;
 
+import java.util.logging.Logger;
+
 import org.bukkit.Material;
 import org.bukkit.block.Chest;
 import org.bukkit.block.ContainerBlock;
@@ -28,6 +30,8 @@ public class GSBlockListener extends BlockListener{
 			plugin = instance;
 		}
 	    public void onBlockDamage(BlockDamageEvent event) {
+	    	if (!(event.getPlayer() instanceof Player))
+	    		return;
 	    	if ((event.getBlock().getTypeId() == Material.FURNACE.getId() 
 	    			|| event.getBlock().getTypeId() == Material.BURNING_FURNACE.getId()) && plugin.furnaceMode())
 	    		sellIt(event, "Furnace");
@@ -95,18 +99,21 @@ public class GSBlockListener extends BlockListener{
 			   	   	//start selling
 					TIntIntHashMap itemsSold = new TIntIntHashMap();
 					TIntShortHashMap blockOptions = new TIntShortHashMap();
+					GSPlayer gsp = plugin.getCalc().getPlayer(player.getName());
+					if (gsp == null){
+						Logger.getLogger("Minecraft").info("[GoldStandard] Null player tried to sell!");
+						return;
+					}
 					for (ItemStack is : stuff.getContents()){
 						if (is != null){
-	    					GSPlayer gsp = plugin.getCalc().getPlayer(player.getName());
-	    					if (plugin.getCalc().getPlayer(player.getName()).isInSellList(is.getTypeId())){
+	    					if (gsp.isInSellList(is.getTypeId())){
 	    						if (!plugin.validSale(player, is.getTypeId()))
 	    							continue;
 	    						itemsSold.putIfAbsent(is.getTypeId(), 0);
 	    						itemsSold.adjustValue(is.getTypeId(),is.getAmount());
 	    						blockOptions.putIfAbsent(is.getTypeId(), (short) 0);
 	    					}
-	    					else if (plugin.getCalc().getPlayer(player.getName()).isInSellList(GSItem.reverseGetBlock(is.getTypeId())) 
-	    							&& plugin.getCalc().getPlayer(player.getName()).itemCanBeBlock(GSItem.reverseGetBlock(is.getTypeId()))){
+	    					else if (gsp.itemCanBeBlock(GSItem.reverseGetBlock(is.getTypeId()))){
 	    						if (!plugin.validSale(player, GSItem.reverseGetBlock(is.getTypeId())))
 	    							continue;
 	    						if (!plugin.getGSItem(GSItem.reverseGetBlock(is.getTypeId())).blockAllowed())
@@ -120,8 +127,6 @@ public class GSBlockListener extends BlockListener{
 					for (int i : blockOptions.keys()){
 						new SellProcedure(plugin,player,stuff,blockOptions.get(i)!=0,false).execute(i, itemsSold.get(i));
 					}
-//					action = new SellProcedure(plugin,player,stuff,true,false);
-//					itemsSold.forEachEntry(action);
 				}
 			}
 	    }
