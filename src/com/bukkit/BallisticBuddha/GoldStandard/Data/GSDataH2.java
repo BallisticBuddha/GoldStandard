@@ -361,15 +361,13 @@ public class GSDataH2 extends GSData {
 		synchronized(CalcLock){
 			PreparedStatement stmt = null;
 			try{
-				stmt = conn.prepareStatement("INSERT INTO gsusers (username,buyItem,buyQty,sellItems,lastBought,lastSold) VALUES (?,?,?,?,?,?) " +
-						"ON DUPLICATE KEY UPDATE buyItem=?, buyQty=?, sellItems=?, lastBought=?, lastSold=?");
-				stmt.setString(1, name);
-				stmt.setInt(2, gsp.getBuyItem());/**/stmt.setInt(7, gsp.getBuyItem());
-				stmt.setInt(3, gsp.getBuyQty());/**/stmt.setInt(8, gsp.getBuyQty());
-				stmt.setString(4, gsp.getSellItems());/**/stmt.setString(9, gsp.getSellItems());
-				stmt.setTimestamp(5, new Timestamp(gsp.getLastBought()));/**/stmt.setTimestamp(10, new Timestamp(gsp.getLastBought()));
-				stmt.setTimestamp(6, new Timestamp(gsp.getLastSold()));/**/stmt.setTimestamp(11, new Timestamp(gsp.getLastSold()));
-				//stmt.setInt(12, gsp.getId());
+				stmt = conn.prepareStatement("UPDATE gsusers SET buyItem=?, buyQty=?, sellItems=?, lastBought=?, lastSold=? WHERE pkgsusers=?");
+				stmt.setInt(1, gsp.getBuyItem());
+				stmt.setInt(2, gsp.getBuyQty());
+				stmt.setString(3, gsp.getSellItems());
+				stmt.setTimestamp(4, new Timestamp(gsp.getLastBought()));
+				stmt.setTimestamp(5, new Timestamp(gsp.getLastSold()));
+				stmt.setInt(6, gsp.getId());
 				stmt.executeUpdate();
 				
 				playerData.remove(gsp.getName());
@@ -392,15 +390,13 @@ public class GSDataH2 extends GSData {
 		synchronized(CalcLock){
 			PreparedStatement stmt = null;
 			try{
-				stmt = conn.prepareStatement("INSERT INTO gsusers (username,buyItem,buyQty,sellItems,lastBought,lastSold) VALUES (?,?,?,?,?,?) " +
-						"ON DUPLICATE KEY UPDATE buyItem=?, buyQty=?, sellItems=?, lastBought=?, lastSold=?");
-				stmt.setString(1, name);
-				stmt.setInt(2, gsp.getBuyItem());/**/stmt.setInt(7, gsp.getBuyItem());
-				stmt.setInt(3, gsp.getBuyQty());/**/stmt.setInt(8, gsp.getBuyQty());
-				stmt.setString(4, gsp.getSellItems());/**/stmt.setString(9, gsp.getSellItems());
-				stmt.setTimestamp(5, new Timestamp(gsp.getLastBought()));/**/stmt.setTimestamp(10, new Timestamp(gsp.getLastBought()));
-				stmt.setTimestamp(6, new Timestamp(gsp.getLastSold()));/**/stmt.setTimestamp(11, new Timestamp(gsp.getLastSold()));
-				//stmt.setInt(12, gsp.getId());
+				stmt = conn.prepareStatement("UPDATE gsusers SET buyItem=?, buyQty=?, sellItems=?, lastBought=?, lastSold=? WHERE pkgsusers=?");
+				stmt.setInt(1, gsp.getBuyItem());
+				stmt.setInt(2, gsp.getBuyQty());
+				stmt.setString(3, gsp.getSellItems());
+				stmt.setTimestamp(4, new Timestamp(gsp.getLastBought()));
+				stmt.setTimestamp(5, new Timestamp(gsp.getLastSold()));
+				stmt.setInt(6, gsp.getId());
 				stmt.executeUpdate();
 			}
 			catch(SQLException ex){
