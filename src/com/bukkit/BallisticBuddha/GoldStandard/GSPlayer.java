@@ -8,29 +8,27 @@ import gnu.trove.procedure.TIntShortProcedure;
 public class GSPlayer {
 	
 	private class convertToString implements TIntShortProcedure{
-
 		private String theString = "";
 		
 		@Override
 		public boolean execute(int arg0, short includeBlocks) {
 			if (!theString.equals(""))
-				theString += theString+","+arg0+(includeBlocks!=0?"~":"");
+				theString += ","+arg0+(includeBlocks!=0?"~":"");
 			else
-				theString += arg0;
+				theString += arg0+(includeBlocks!=0?"~":"");
 			return true;
 		}
 		public String getString(){
 			return this.theString;
 		}
 	}
-	
 	int ID;
 	String name;
 	TIntShortHashMap sellItems;
 	int buyItem = 0;
 	int buyQty = 1;
-	long lastBought;
-	long lastSold;
+	long lastBought = System.currentTimeMillis();
+	long lastSold = System.currentTimeMillis();
 	
 	public GSPlayer(int id, String name){
 		this.ID = id;
