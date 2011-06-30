@@ -20,3 +20,16 @@ Items:
         Buyback: false
         Type: relative
         Relation: 10
+    Redstone:
+        Id: 264
+        Buyback: false
+        Type: independent
+        Price: 5
+        Minimum: 1
+        Maximum: 10
+        Ratio: .01
+    Stone:
+        Id: 1
+        Buyback: true
+        Type: fixed
+        Price: 1

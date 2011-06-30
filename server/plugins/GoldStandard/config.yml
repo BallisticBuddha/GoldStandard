@@ -1,7 +1,7 @@
 SellTool: 283
 Duration: 3
 Reload Interval: 60
-Permissions: true
+Permissions: false
 Allow Block: true
 Buyback: false
 Cooldown:
@@ -13,7 +13,7 @@ SellMethods:
     - Chest
     - Command
 Protection: LWC
-Data: MysQL
+Data: MySQL
 MySQL:
     database: minecraft
     hostname: localhost
