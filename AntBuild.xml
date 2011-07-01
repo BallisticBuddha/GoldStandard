@@ -13,8 +13,9 @@
 	   <target name="compile">
 	      <mkdir dir="build"/>
 	      <javac destdir="build"
-	             debug="on"
-	             optimize="on">
+	             debug="off"
+	             optimize="on"
+	      	     includeantruntime="true">
 	         <src path="src"/>
 	      </javac>
 	   </target>
