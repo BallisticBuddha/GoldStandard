@@ -45,7 +45,7 @@ public class GSDataMySQL extends GSData{
   						"`buyItem` INT UNSIGNED NOT NULL DEFAULT 0 ,"+
   						"`buyQty` INT UNSIGNED NOT NULL DEFAULT 1 ,"+
   						"`sellItems` VARCHAR(160) NOT NULL DEFAULT '' ,"+
-  						"`lastBought` TIMESTAMP NOT NULL DEFAULT '1970-01-01 00:00:00',"+
+  						"`lastBought` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,"+
   						"`lastSold` TIMESTAMP NOT NULL DEFAULT '1970-01-01 00:00:00',"+
   						"PRIMARY KEY (`pkgsusers`) ,"+
   						"UNIQUE INDEX `name_UNIQUE` (`username` ASC)"+
@@ -60,6 +60,7 @@ public class GSDataMySQL extends GSData{
 						"KEY `fk_user` (`user`),"+
 						"CONSTRAINT `fk_user` FOREIGN KEY (`user`) REFERENCES `gsusers` (`pkgsusers`) ON DELETE SET NULL ON UPDATE CASCADE"+
 						") ENGINE = InnoDB DEFAULT CHARSET = latin1");
+				log.info("[GoldStandard] Created GoldStandard tables.");
 				}
 			catch(SQLException ex){
 				log.severe("[GoldStandard] Error when creating gslog." + "\n" +ex);
@@ -312,12 +313,15 @@ public class GSDataMySQL extends GSData{
 	@Override
 	public void addPlayer(String name) {
 		int id = 0;
+		Timestamp now = new Timestamp(System.currentTimeMillis());
 		synchronized (CalcLock){
 			PreparedStatement stmt = null;
 			ResultSet rs = null;
 			try{
-				stmt = conn.prepareStatement("INSERT INTO gsusers (username) VALUES (?)");
+				stmt = conn.prepareStatement("INSERT INTO gsusers (username,lastBought,lastSold) VALUES (?)");
 				stmt.setString(1, name);
+				stmt.setTimestamp(2, now);
+				stmt.setTimestamp(3, now);
 				stmt.executeUpdate();
 
 				stmt = conn.prepareStatement("SELECT * from gsusers WHERE username = ?");
@@ -336,6 +340,8 @@ public class GSDataMySQL extends GSData{
 			}
 		}
 		GSPlayer gsp = new GSPlayer(id, name);
+		gsp.setLastBought(now.getTime());
+		gsp.setLastSold(now.getTime());
 		if (!playerData.containsKey(name))
 			playerData.put(name, gsp);
 		else
