@@ -65,6 +65,9 @@ public class GSDataMySQL extends GSData{
 			catch(SQLException ex){
 				log.severe("[GoldStandard] Error when creating gslog." + "\n" +ex);
 			}
+			catch(NullPointerException ex){
+				log.severe("[GoldStandard] Could not connect to MySQL server.");
+			}
 		}
 	}
 	public int countTransactions(String itemID){
