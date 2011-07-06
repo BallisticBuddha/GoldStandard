@@ -1,6 +1,0 @@
-06-29 13:56:46 jdbc[2]: exception
-org.h2.jdbc.JdbcSQLException: Syntax error in SQL statement "INSERT INTO GSUSERS (USERNAME,BUYITEM,BUYQTY,SELLITEMS,LASTBOUGHT,LASTSOLD) VALUES (?,?,?,?,?,?) ON[*] DUPLICATE KEY UPDATE BUYITEM=?, BUYQTY=?, SELLITEMS=?, LASTBOUGHT=?, LASTSOLD=? "; SQL statement:
-INSERT INTO gsusers (username,buyItem,buyQty,sellItems,lastBought,lastSold) VALUES (?,?,?,?,?,?) ON DUPLICATE KEY UPDATE buyItem=?, buyQty=?, sellItems=?, lastBought=?, lastSold=? [42000-153]
-06-29 14:01:33 jdbc[2]: exception
-org.h2.jdbc.JdbcSQLException: Syntax error in SQL statement "INSERT INTO GSUSERS (USERNAME,BUYITEM,BUYQTY,SELLITEMS,LASTBOUGHT,LASTSOLD) VALUES (?,?,?,?,?,?) ON[*] DUPLICATE KEY UPDATE BUYITEM=?, BUYQTY=?, SELLITEMS=?, LASTBOUGHT=?, LASTSOLD=? "; SQL statement:
-INSERT INTO gsusers (username,buyItem,buyQty,sellItems,lastBought,lastSold) VALUES (?,?,?,?,?,?) ON DUPLICATE KEY UPDATE buyItem=?, buyQty=?, sellItems=?, lastBought=?, lastSold=? [42000-153]

@@ -5,15 +5,15 @@ Permissions: false
 Allow Block: true
 Buyback: false
 Cooldown:
-    Sell: 5000 #5 seconds
-    Buy: 5000
+    Sell: 15000 #15 seconds
+    Buy: 15000
     Ops obey: true
 SellMethods:
     - Furnace
     - Chest
     - Command
 Protection: LWC
-Data: MySQL
+Data: H2
 MySQL:
     database: minecraft
     hostname: localhost
