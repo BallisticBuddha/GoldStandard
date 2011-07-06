@@ -321,7 +321,7 @@ public class GSDataMySQL extends GSData{
 			PreparedStatement stmt = null;
 			ResultSet rs = null;
 			try{
-				stmt = conn.prepareStatement("INSERT INTO gsusers (username,lastBought,lastSold) VALUES (?)");
+				stmt = conn.prepareStatement("INSERT INTO gsusers (username,lastBought,lastSold) VALUES (?,?,?)");
 				stmt.setString(1, name);
 				stmt.setTimestamp(2, now);
 				stmt.setTimestamp(3, now);
@@ -335,7 +335,7 @@ public class GSDataMySQL extends GSData{
 				}
 			}
 			catch(SQLException ex){
-				log.severe("[GoldStandard] Error when adding player"+ name + "\n" +ex);
+				log.severe("[GoldStandard] Error when adding player "+ name + "\n" +ex);
 			}
 			finally{
 				SQLUtils.closeQuietly(stmt);
@@ -353,7 +353,7 @@ public class GSDataMySQL extends GSData{
 	@Override
 	public void storePlayer(String name) {
 		if (!playerData.containsKey(name)){
-			log.severe("[GoldStandard] Could not store user"+name+". Player was not loaded into memory!");
+			log.severe("[GoldStandard] Could not store user "+name+". Player was not loaded into memory!");
 			return;
 		}
 		GSPlayer gsp = playerData.get(name);
@@ -382,7 +382,7 @@ public class GSDataMySQL extends GSData{
 	@Override
 	public void storePlayerND(String name) {
 		if (!playerData.containsKey(name)){
-			log.severe("[GoldStandard] Could not store user"+name+". Player was not loaded into memory!");
+			log.severe("[GoldStandard] Could not store user "+name+". Player was not loaded into memory!");
 			return;
 		}
 		GSPlayer gsp = playerData.get(name);

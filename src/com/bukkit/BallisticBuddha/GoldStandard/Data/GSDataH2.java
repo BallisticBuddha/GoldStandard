@@ -325,12 +325,15 @@ public class GSDataH2 extends GSData {
 	@Override
 	public void addPlayer(String name) {
 		int id = 0;
+		Timestamp now = new Timestamp(System.currentTimeMillis());
 		synchronized (CalcLock){
 			PreparedStatement stmt = null;
 			ResultSet rs = null;
 			try{
-				stmt = conn.prepareStatement("INSERT INTO gsusers (username) VALUES (?)");
+				stmt = conn.prepareStatement("INSERT INTO gsusers (username,lastBought,lastSold) VALUES (?,?,?)");
 				stmt.setString(1, name);
+				stmt.setTimestamp(2, now);
+				stmt.setTimestamp(3, now);
 				stmt.executeUpdate();
 
 				stmt = conn.prepareStatement("SELECT * from gsusers WHERE username = ?");
@@ -341,7 +344,7 @@ public class GSDataH2 extends GSData {
 				}
 			}
 			catch(SQLException ex){
-				log.severe("[GoldStandard] Error when adding player"+ name + "\n" +ex);
+				log.severe("[GoldStandard] Error when adding player "+ name + "\n" +ex);
 			}
 			finally{
 				SQLUtils.closeQuietly(stmt);
@@ -349,6 +352,8 @@ public class GSDataH2 extends GSData {
 			}
 		}
 		GSPlayer gsp = new GSPlayer(id, name);
+		gsp.setLastBought(now.getTime());
+		gsp.setLastSold(now.getTime());
 		if (!playerData.containsKey(name))
 			playerData.put(name, gsp);
 		else
@@ -357,7 +362,7 @@ public class GSDataH2 extends GSData {
 	@Override
 	public void storePlayer(String name) {
 		if (!playerData.containsKey(name)){
-			log.severe("[GoldStandard] Could not store user"+name+". Player was not loaded into memory!");
+			log.severe("[GoldStandard] Could not store user "+name+". Player was not loaded into memory!");
 			return;
 		}
 		GSPlayer gsp = playerData.get(name);
@@ -386,7 +391,7 @@ public class GSDataH2 extends GSData {
 	@Override
 	public void storePlayerND(String name) {
 		if (!playerData.containsKey(name)){
-			log.severe("[GoldStandard] Could not store user"+name+". Player was not loaded into memory!");
+			log.severe("[GoldStandard] Could not store user "+name+". Player was not loaded into memory!");
 			return;
 		}
 		GSPlayer gsp = playerData.get(name);
