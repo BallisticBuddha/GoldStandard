@@ -194,7 +194,7 @@ public class GSCalc {
 	}
 	public long timeSinceBought(Player player){
 		if (data.getPlayer(player.getName()) == null){
-			System.out.println("ERROR, a null player is trying to buy something");
+			log.severe("[GoldStandard] A null player is trying to buy something");
 			return 0;
 		}
 		System.out.println();
@@ -206,7 +206,7 @@ public class GSCalc {
 	}
 	public long timeSinceSold(Player player){
 		if (data.getPlayer(player.getName()) == null){
-			System.out.println("ERROR, a null player is trying to sell something");
+			log.severe("[GoldStandard] A null player is trying to sell something");
 			return 0;
 		}
 		long diff = (System.currentTimeMillis() - data.getPlayer(player.getName()).getLastSold());

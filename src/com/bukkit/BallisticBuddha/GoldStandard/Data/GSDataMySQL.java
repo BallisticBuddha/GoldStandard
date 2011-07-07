@@ -45,9 +45,9 @@ public class GSDataMySQL extends GSData{
   						"`buyItem` INT UNSIGNED NOT NULL DEFAULT 0 ,"+
   						"`buyQty` INT UNSIGNED NOT NULL DEFAULT 1 ,"+
   						"`sellItems` VARCHAR(160) NOT NULL DEFAULT '' ,"+
-  						"`lastBought` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,"+
+  						"`lastBought` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,"+
   						"`lastSold` TIMESTAMP NOT NULL DEFAULT '1970-01-01 00:00:00',"+
-  						"PRIMARY KEY (`pkgsusers`) ,"+
+  						"PRIMARY KEY (`pkgsusers`),"+
   						"UNIQUE INDEX `name_UNIQUE` (`username` ASC)"+
   						") ENGINE = InnoDB DEFAULT CHARACTER SET = latin1");
 				stmt.executeUpdate("CREATE TABLE IF NOT EXISTS `gslog` ("+

@@ -8,12 +8,19 @@ Items:
         Minimum: 50
         Maximum: 200
         Ratio: .1
+#    Iron:
+#        Id: 265
+#        Allow Block: false
+#        Buyback: true
+#        Type: relative
+#        Relation: .5
     Iron:
         Id: 265
         Allow Block: false
         Buyback: true
         Type: relative
-        Relation: .5
+        Formula: '<Gold>/2'
+
     Diamond:
         Id: 264
         Allow Block: true
@@ -33,3 +40,11 @@ Items:
         Buyback: true
         Type: fixed
         Price: 1
+    Coal:
+        Id: 64
+        Buyback: false
+        Type: independent
+        Price: 10
+        Minimum: 0
+        Maximum: 50
+        Ratio: 1
