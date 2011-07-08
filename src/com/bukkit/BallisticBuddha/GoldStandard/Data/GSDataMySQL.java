@@ -45,8 +45,8 @@ public class GSDataMySQL extends GSData{
   						"`buyItem` INT UNSIGNED NOT NULL DEFAULT 0 ,"+
   						"`buyQty` INT UNSIGNED NOT NULL DEFAULT 1 ,"+
   						"`sellItems` VARCHAR(160) NOT NULL DEFAULT '' ,"+
-  						"`lastBought` TIMESTAMP NOT NULL DEFAULT '1970-01-01 00:00:01',"+
-  						"`lastSold` TIMESTAMP NOT NULL DEFAULT '1970-01-01 00:00:01',"+
+  						"`lastBought` TIMESTAMP NOT NULL DEFAULT '2000-01-01 00:00:01',"+
+  						"`lastSold` TIMESTAMP NOT NULL DEFAULT '2000-01-01 00:00:01',"+
   						"PRIMARY KEY (`pkgsusers`),"+
   						"UNIQUE INDEX `name_UNIQUE` (`username` ASC)"+
   						") ENGINE = InnoDB DEFAULT CHARACTER SET = latin1");
