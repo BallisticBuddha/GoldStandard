@@ -37,7 +37,7 @@ import org.bukkit.util.config.Configuration;
 
 /**
 	@author BallisticBuddha
-	@version 1.0
+	@version 1.0.2
 	
 	Gold Standard plugin for bukkit
 	

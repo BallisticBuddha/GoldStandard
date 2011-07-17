@@ -53,8 +53,8 @@ public class GSDataH2 extends GSData {
 					"BUYITEM INTEGER DEFAULT 0 NOT NULL,"+
 					"BUYQTY INTEGER DEFAULT 1 NOT NULL,"+
 					"SELLITEMS VARCHAR(160) DEFAULT '' NOT NULL,"+
-					"LASTBOUGHT TIMESTAMP DEFAULT '2000-01-01 00:00:01' NOT NULL,"+
-					"LASTSOLD TIMESTAMP DEFAULT '2000-01-01 00:00:01' NOT NULL,"+
+					"LASTBOUGHT TIMESTAMP DEFAULT '2010-01-01 00:00:01' NOT NULL,"+
+					"LASTSOLD TIMESTAMP DEFAULT '2010-01-01 00:00:01' NOT NULL,"+
 					"PRIMARY KEY (PKGSUSERS),"+
 					"UNIQUE (USERNAME))");
 
@@ -69,7 +69,7 @@ public class GSDataH2 extends GSData {
 					"REFERENCES GSUSERS(PKGSUSERS) ON UPDATE CASCADE ON DELETE SET NULL)");
 			}
 			catch(SQLException ex){
-				log.severe("[GoldStandard] Error when creating gslog." + "\n" +ex);
+				log.severe("[GoldStandard] Error when creating database tables." + "\n" +ex);
 			}
 			catch(NullPointerException ex){
 				log.severe("[GoldStandard] Could not connect to H2 database.");
