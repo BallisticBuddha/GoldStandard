@@ -67,6 +67,7 @@ public class GSDataH2 extends GSData {
 					"PRIMARY KEY (PKGSLOG),"+
 					"FOREIGN KEY (USER)"+
 					"REFERENCES GSUSERS(PKGSUSERS) ON UPDATE CASCADE ON DELETE SET NULL)");
+				log.info("[GoldStandard] Created databse tables.");
 			}
 			catch(SQLException ex){
 				log.severe("[GoldStandard] Error when creating database tables." + "\n" +ex);

@@ -60,10 +60,10 @@ public class GSDataMySQL extends GSData{
 						"KEY `fk_user` (`user`),"+
 						"CONSTRAINT `fk_user` FOREIGN KEY (`user`) REFERENCES `gsusers` (`pkgsusers`) ON DELETE SET NULL ON UPDATE CASCADE"+
 						") ENGINE = InnoDB DEFAULT CHARSET = latin1");
-				log.info("[GoldStandard] Created GoldStandard tables.");
+				log.info("[GoldStandard] Created database tables.");
 				}
 			catch(SQLException ex){
-				log.severe("[GoldStandard] Error when creating gslog." + "\n" +ex);
+				log.severe("[GoldStandard] Error when creating database tables." + "\n" +ex);
 			}
 			catch(NullPointerException ex){
 				log.severe("[GoldStandard] Could not connect to MySQL server.");
