@@ -22,8 +22,9 @@ public class GSCalc {
 		this.system = this.gs.getConfig().getString("Data","none");
 		
 		if (system.equalsIgnoreCase("none")){
-			this.data = null;
-			log.info("[GoldStandard] Using static pricing.");
+			this.data = new GSNoneData();
+			log.info("[GoldStandard] Using temporary (\"none\") data.");
+			log.warning("[GoldStandard] Data will not be stored after shutdown.");
 		}
 		else if (system.equalsIgnoreCase("mysql")){
 			this.data = new GSDataMySQL();
@@ -103,41 +104,27 @@ public class GSCalc {
 		}
 	}
 	public void clear(){
-		if (this.system.equalsIgnoreCase("none"))
-			return;
 		data.clear();
 	}
 	public void clearOld(){
-		if (this.system.equalsIgnoreCase("none"))
-			return;
 		data.clearOld();
 	}
 	public void addEntry(int amt, String usr, int item){
-		if (this.system.equalsIgnoreCase("none"))
-			return;
 		data.addEntry(amt, usr, item);
 	}
 	public void forceIncrement(int amt, int gsid){
-		if (this.system.equalsIgnoreCase("none"))
-			return;
 		data.forceIncrement(amt,gsid);
 	}
 	public void addEntryNI(int amt, String usr, int item){
-		if (this.system.equalsIgnoreCase("none"))
-			return;
 		data.addEntryNI(amt, usr, item);
 	}
 	public boolean needsCleaning(){
-		if (this.system.equalsIgnoreCase("none"))
-			return false;
 		return data.needsCleaning();
 	}
 	public String getSystem(){
 		return system;
 	}
 	public void closeDBSession(){
-		if (this.system.equalsIgnoreCase("none"))
-			return;
 		data.closeSession();
 	}
 	/** Gets the number of sales or purchases of the item and constructs
