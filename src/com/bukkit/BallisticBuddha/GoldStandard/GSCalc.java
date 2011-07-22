@@ -57,7 +57,7 @@ public class GSCalc {
 			return val;		
 	}
 	private double calculateRelative(GSItem gsi){
-		return calculateBase(gs.getBaseItem()) * gsi.getRelation();
+		return calculate(gsi.getParent(gs)) * gsi.getRelation();
 	}
 	private double calculateIndependent(GSItem gsi){
 		double val = (gsi.getPrice() - (data.getTransactions(gsi) * gsi.getRatio()));

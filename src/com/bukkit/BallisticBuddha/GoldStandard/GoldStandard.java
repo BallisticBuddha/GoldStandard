@@ -37,7 +37,7 @@ import org.bukkit.util.config.Configuration;
 
 /**
 	@author BallisticBuddha
-	@version 1.0.2
+	@version 1.1.0
 	
 	Gold Standard plugin for bukkit
 	
@@ -493,7 +493,8 @@ public class GoldStandard extends JavaPlugin{
 	        		break;
 	        	case relative:
 	        		relation = itemConfig.getDouble("Items."+item+".Relation",0);
-	        		gsi = new GSItem(name,id,allowBlock,buyback,gst,relation);
+	        		//TODO: implement custom parent items
+	        		gsi = new GSItem(name,id,allowBlock,buyback,gst,relation,this.getBaseItem().getNickname());
 	        		items.put(id,gsi);
 	        		break;
 	        	case independent:

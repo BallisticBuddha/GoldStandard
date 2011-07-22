@@ -13,6 +13,7 @@ public class GSItem extends ItemStack {
 	private String nickname;
 	private GSType type;
 	private double relation;
+	private String parent;
 	private double price;
 	private double minimum;
 	private double maximum;
@@ -44,7 +45,7 @@ public class GSItem extends ItemStack {
 		this.buyBack = bb;
 	}
 	
-	/** Constructor for Relative and Fixed items
+	/** Constructor for Fixed items
 	 * 
 	 * @param nick - Nickname of the item
 	 * @param id - Item ID of this item
@@ -52,18 +53,35 @@ public class GSItem extends ItemStack {
 	 * @param bb - whether this item can be bought back or not
 	 * @param amount - size of the item stack
 	 * @param gst - Type of pricing to use (Relative or Fixed)
-	 * @param arg - either the set price of a fixed item or the relation of a relative item
+	 * @param price - The set price of the fixed item
 	 */
-	public GSItem(String nick, int id, boolean allowBlock , boolean bb, GSType gst, double arg){
+	public GSItem(String nick, int id, boolean allowBlock , boolean bb, GSType gst, double price){
 		super(id);
 		this.nickname = nick;
 		this.type = gst;
 		this.allowBlock = allowBlock;
 		this.buyBack = bb;
-		if (gst == GSType.relative)
-			this.relation = arg;
-		else if (gst == GSType.fixed)
-			this.price = arg;
+		this.price = price;
+	}
+	/** Constructor for Relative items
+	 * 
+	 * @param nick - Nickname of the item
+	 * @param id - Item ID of this item
+	 * @param allowBlock - if the item can be sold in block form
+	 * @param bb - whether this item can be bought back or not
+	 * @param amount - size of the item stack
+	 * @param gst - Type of pricing to use (Relative or Fixed)
+	 * @param relation - The relation (weight) to this item's parent item
+	 * @param parent - The parent item of this item
+	 */
+	public GSItem(String nick, int id, boolean allowBlock , boolean bb, GSType gst, double relation, String parent){
+		super(id);
+		this.nickname = nick;
+		this.type = gst;
+		this.allowBlock = allowBlock;
+		this.buyBack = bb;
+		this.relation = relation;
+		this.parent = parent;
 	}
 	/** Returns the type of pricing method for this item [Base,Relative,Independent, or Fixed]
 	 * @valid_types ALL 
@@ -161,5 +179,8 @@ public class GSItem extends ItemStack {
 	}
 	public boolean canBeBought(){
 		return this.buyBack;
+	}
+	public GSItem getParent(GoldStandard instance){
+		return instance.getGSItem(parent);
 	}
 }
