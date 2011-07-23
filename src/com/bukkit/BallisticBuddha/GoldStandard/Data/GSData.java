@@ -23,13 +23,17 @@ public abstract class GSData {
 	private class SumRelativeTransactions implements TIntDoubleProcedure{
 		private GSData data;
 		private double sum = 0.0;
+		private GSItem parent;
 		
-		public SumRelativeTransactions(GSData dat){
+		public SumRelativeTransactions(GSData dat, GSItem gsi){
 			data = dat;
+			this.parent = gsi;
 		}
 		@Override
 		public boolean execute(int itemId, double relation) {
-			sum += relation * data.getTransactions(itemId);
+			//Both sides of this comparitor should point to the same object in the map in the same instance of GoldStandard
+			if (gs.getGSItem(itemId).getParent(gs) == parent)
+				sum += relation * data.getTransactions(itemId);
 			return true;
 		}
 		//GET SOME!
@@ -75,17 +79,18 @@ public abstract class GSData {
 	 * 
 	 */
 	public double getTransactions(GSItem gsi){
+		SumRelativeTransactions srt = new SumRelativeTransactions(this,gsi);
 		switch(gsi.getGSType()){
 			case base:
-				SumRelativeTransactions srt = new SumRelativeTransactions(this);
 				relativeItems.forEachEntry(srt);
 				return srt.getSum() + transValues.get(gsi.getTypeId());
 			case independent:
 				return transValues.get(gsi.getTypeId());
-//			case relative:
-//				return 0.0;
-//			case fixed:
-//				return 0.0;
+			case relative:
+				relativeItems.forEachEntry(srt);
+				return srt.getSum() + transValues.get(gsi.getTypeId());
+			case fixed:
+				return 0.0;
 			default:
 				return 0.0;				
 		}
