@@ -8,19 +8,12 @@ Items:
         Minimum: 50
         Maximum: 200
         Ratio: .1
-#    Iron:
-#        Id: 265
-#        Allow Block: false
-#        Buyback: true
-#        Type: relative
-#        Relation: .5
     Iron:
         Id: 265
         Allow Block: false
         Buyback: true
         Type: relative
-        Formula: '<Gold>/2'
-
+        Relation: .5
     Diamond:
         Id: 264
         Allow Block: true
@@ -28,7 +21,7 @@ Items:
         Type: relative
         Relation: 10
     Redstone:
-        Id: 264
+        Id: 331
         Buyback: false
         Type: independent
         Price: 5

@@ -1,4 +1,5 @@
 package com.bukkit.BallisticBuddha.GoldStandard;
+import java.io.IOException;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -23,8 +24,8 @@ public class GSCalc {
 		
 		if (system.equalsIgnoreCase("none")){
 			this.data = new GSNoneData();
-			log.info("[GoldStandard] Using temporary (\"none\") data.");
-			log.warning("[GoldStandard] Data will not be stored after shutdown.");
+			log.info("[GoldStandard] Using flatfiles.");
+			log.warning("[GoldStandard] Outdated transactions will not be cleared.");
 		}
 		else if (system.equalsIgnoreCase("mysql")){
 			this.data = new GSDataMySQL();

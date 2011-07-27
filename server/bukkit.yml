@@ -1,6 +1,7 @@
 settings:
     spawn-radius: 16
     update-folder: update
+    permissions-file: permissions.yml
 aliases:
     icanhasbukkit:
     - version
