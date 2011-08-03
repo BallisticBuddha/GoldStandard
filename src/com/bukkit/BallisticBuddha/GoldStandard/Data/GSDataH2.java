@@ -290,7 +290,7 @@ public class GSDataH2 extends GSData {
 	public boolean loadPlayer(String name) {
 		Boolean userexists = false;
 		if (playerData.containsKey(name))
-			playerData.remove("name");
+			playerData.remove(name);
 		synchronized (CalcLock){
 			PreparedStatement stmt = null;
 			ResultSet rs = null;

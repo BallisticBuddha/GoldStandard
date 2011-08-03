@@ -1,43 +1,20 @@
 Items:
-    Gold: 
+    Gold:
         Id: 266
-        Allow Block: true
-        Buyback: true
         Type: base
-        Price: 150
-        Minimum: 50
+        Ratio: 0.1
+        Minimum: 5
         Maximum: 200
-        Ratio: .1
+        Price: 100
     Iron:
         Id: 265
-        Allow Block: false
-        Buyback: true
         Type: relative
-        Relation: .5
-    Diamond:
-        Id: 264
-        Allow Block: true
-        Buyback: false
-        Type: relative
-        Relation: 10
+        Relation: 0.1
+        Parent Item: Gold
     Redstone:
         Id: 331
-        Buyback: false
         Type: independent
+        Ratio: .01
         Price: 5
         Minimum: 1
-        Maximum: 10
-        Ratio: .01
-    Stone:
-        Id: 1
-        Buyback: true
-        Type: fixed
-        Price: 1
-    Coal:
-        Id: 64
-        Buyback: false
-        Type: independent
-        Price: 10
-        Minimum: 0
         Maximum: 50
-        Ratio: 1

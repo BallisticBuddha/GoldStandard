@@ -17,12 +17,12 @@ public class GSNoneData extends GSData {
 	Configuration transactions;
 	
 	public GSNoneData(){
-		this.countAllItems();
 		try {
 			initFlatFiles();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		this.countAllItems();
 	}
 	private void initFlatFiles() throws IOException{
 		createFlatFiles();
@@ -36,7 +36,7 @@ public class GSNoneData extends GSData {
 			FileWriter fw = new FileWriter(transactionFile);
 			fw.write("#Auto-generated flat-file for storing transaction data"+'\n'+"Items:");
 			for (int itemId : transValues.keys()){
-				fw.write('\n'+"    "+itemId+":");
+				fw.write('\n'+"    '"+itemId+"': 0");
 			}
 			fw.close();
 		}
@@ -56,7 +56,7 @@ public class GSNoneData extends GSData {
 	
 	@Override
 	public int countTransactions(String itemID) {
-		return 0;
+		return transactions.getInt("Items."+itemID,0);
 	}
 
 	@Override
@@ -79,6 +79,9 @@ public class GSNoneData extends GSData {
 
 	@Override
 	public void clear() {
+		for (int itemId : transValues.keys()){
+			transactions.setProperty("Items."+itemId, 0);
+		}
 		return;
 	}
 
@@ -96,34 +99,105 @@ public class GSNoneData extends GSData {
 
 	@Override
 	public void closeSession() {
-		players.save();
+		forceFileSave();
 		return;
 	}
 
 	@Override
 	public void loadAllPlayers() {
+		playerData.clear();
+		tmpCounter = 0;
+		for (String playerName : transactions.getKeys("Players")){
+			GSPlayer gsp = new GSPlayer(tmpCounter++, playerName);
+			gsp.setBuyItem(players.getInt("Players."+playerName+".buyItem",0));
+			gsp.setBuyQty(players.getInt("Players."+playerName+".buyQty", 1));
+			gsp.setSellItems(players.getString("Players."+playerName+".sellItems"));
+			gsp.setLastBought(Long.parseLong(players.getString("Players."+playerName+".lastBought")));
+			gsp.setLastSold(Long.parseLong(players.getString("Players."+playerName+".lastSold")));
+			playerData.put(playerName, gsp);
+		}
 		return;
 	}
 
 	@Override
-	public boolean loadPlayer(String name) {
-		return false;
+	public boolean loadPlayer(String playerName) {
+		Boolean userexists = false;
+		if (players.getNode("Players."+playerName) != null){
+			GSPlayer gsp = new GSPlayer(tmpCounter++, playerName);
+			gsp.setBuyItem(players.getInt("Players."+playerName+".buyItem",0));
+			gsp.setBuyQty(players.getInt("Players."+playerName+".buyQty", 1));
+			gsp.setSellItems(players.getString("Players."+playerName+".sellItems"));
+			gsp.setLastBought(Long.parseLong(players.getString("Players."+playerName+".lastBought")));
+			gsp.setLastSold(Long.parseLong(players.getString("Players."+playerName+".lastSold")));
+			playerData.put(playerName, gsp);
+			userexists = true;
+			
+			if (playerData.containsKey(playerName))
+				playerData.remove(playerName);
+		}
+		return userexists;
 	}
 
 	@Override
 	public void addPlayer(String name) {
+		players.setProperty("Players"+name+"buyItem",0);
+		players.setProperty("Players"+name+"buyQty",1);
+		players.setProperty("Players"+name+"sellItems","");
+		players.setProperty("Players"+name+"lastBought",Long.toString(System.currentTimeMillis()));
+		players.setProperty("Players"+name+"lastSold",Long.toString(System.currentTimeMillis()));
+		players.save();
 		this.playerData.put(name, new GSPlayer(tmpCounter++, name));
 		return;
 	}
 	
 	@Override
 	public void storePlayer(String name) {
+		if (!playerData.containsKey(name)){
+			log.severe("[GoldStandard] Could not store user "+name+". Player was not loaded into memory!");
+			return;
+		}
+		GSPlayer gsp = playerData.get(name);
+		players.setProperty("Players"+name+"buyItem",gsp.getBuyItem());
+		players.setProperty("Players"+name+"buyQty",gsp.getBuyQty());
+		players.setProperty("Players"+name+"sellItems",gsp.getSellItems());
+		players.setProperty("Players"+name+"lastBought",gsp.getLastBought());
+		players.setProperty("Players"+name+"lastSold",gsp.getLastBought());
+		players.save();
+		
 		playerData.remove(name);
 		return;
 	}
 
 	@Override
 	public void storePlayerND(String name) {
+		if (!playerData.containsKey(name)){
+			log.severe("[GoldStandard] Could not store user "+name+". Player was not loaded into memory!");
+			return;
+		}
+		GSPlayer gsp = playerData.get(name);
+		players.setProperty("Players"+name+"buyItem",gsp.getBuyItem());
+		players.setProperty("Players"+name+"buyQty",gsp.getBuyQty());
+		players.setProperty("Players"+name+"sellItems",gsp.getSellItems());
+		players.setProperty("Players"+name+"lastBought",gsp.getLastBought());
+		players.setProperty("Players"+name+"lastSold",gsp.getLastBought());
+		players.save();
 		return;
+	}
+	public void storePlayerNDNS(String name) {
+		if (!playerData.containsKey(name)){
+			log.severe("[GoldStandard] Could not store user "+name+". Player was not loaded into memory!");
+			return;
+		}
+		GSPlayer gsp = playerData.get(name);
+		players.setProperty("Players"+name+"buyItem",gsp.getBuyItem());
+		players.setProperty("Players"+name+"buyQty",gsp.getBuyQty());
+		players.setProperty("Players"+name+"sellItems",gsp.getSellItems());
+		players.setProperty("Players"+name+"lastBought",gsp.getLastBought());
+		players.setProperty("Players"+name+"lastSold",gsp.getLastBought());
+		return;
+	}
+	public void forceFileSave(){
+		players.save();
+		transactions.save();
 	}
 }

@@ -22,7 +22,7 @@ public class GSCalc {
 		this.gs = instance;
 		this.system = this.gs.getConfig().getString("Data","none");
 		
-		if (system.equalsIgnoreCase("none")){
+		if (system.equalsIgnoreCase("none") || system.equalsIgnoreCase("flatfiles")){
 			this.data = new GSNoneData();
 			log.info("[GoldStandard] Using flatfiles.");
 			log.warning("[GoldStandard] Outdated transactions will not be cleared.");
@@ -176,6 +176,14 @@ public class GSCalc {
 	}
 	public void storePlayerND(String name){
 		data.storePlayerND(name);
+	}
+	public void storeFlatfiles(){
+		if (!(data instanceof GSNoneData))
+			return;
+		for (String pname : getPlayers()){
+			((GSNoneData) data).storePlayerNDNS(pname);
+		}
+		((GSNoneData) data).forceFileSave();
 	}
 	public GSPlayer getPlayer(String name){
 		return data.getPlayer(name);
