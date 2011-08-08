@@ -331,10 +331,13 @@ public class GSDataH2 extends GSData {
 			PreparedStatement stmt = null;
 			ResultSet rs = null;
 			try{
-				stmt = conn.prepareStatement("INSERT INTO gsusers (username,lastBought,lastSold) VALUES (?,?,?)");
+				stmt = conn.prepareStatement("INSERT INTO gsusers (username,buyItem,buyQty,sellItems,lastBought,lastSold) VALUES (?,?,?,?,?,?)");
 				stmt.setString(1, name);
-				stmt.setTimestamp(2, now);
-				stmt.setTimestamp(3, now);
+				stmt.setInt(2, gs.getDefaultBuyItem());
+				stmt.setInt(3, gs.getDefaultBuyQty());
+				stmt.setString(4, gs.getDefaultSellItems());
+				stmt.setTimestamp(5, now);
+				stmt.setTimestamp(6, now);
 				stmt.executeUpdate();
 
 				stmt = conn.prepareStatement("SELECT * from gsusers WHERE username = ?");

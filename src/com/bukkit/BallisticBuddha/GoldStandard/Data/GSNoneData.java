@@ -142,9 +142,9 @@ public class GSNoneData extends GSData {
 	@Override
 	public void addPlayer(String name) {
 		players.setProperty("Players."+name, null);
-		players.setProperty("Players."+name+".buyItem",0);
-		players.setProperty("Players."+name+".buyQty",1);
-		players.setProperty("Players."+name+".sellItems","");
+		players.setProperty("Players."+name+".buyItem",gs.getDefaultBuyItem());
+		players.setProperty("Players."+name+".buyQty",gs.getDefaultBuyQty());
+		players.setProperty("Players."+name+".sellItems",gs.getDefaultSellItems());
 		players.setProperty("Players."+name+".lastBought",Long.toString(System.currentTimeMillis()));
 		players.setProperty("Players."+name+".lastSold",Long.toString(System.currentTimeMillis()));
 		players.save();
