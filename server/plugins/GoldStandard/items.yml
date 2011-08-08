@@ -1,3 +1,7 @@
+Default:
+    BuyItem: 266
+    BuyQty: 1
+    SellItems: 266,265,331
 Items:
     Gold:
         Id: 266
@@ -10,7 +14,6 @@ Items:
         Id: 265
         Type: relative
         Relation: 0.1
-        Parent Item: Gold
     Redstone:
         Id: 331
         Type: independent

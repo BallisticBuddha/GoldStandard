@@ -253,7 +253,7 @@ public class GSDataMySQL extends GSData{
 
 				while (rs.next()){
 					String pname = rs.getString("username");
-					GSPlayer gsp = new GSPlayer(rs.getInt("pkgsusers"),pname);
+					GSPlayer gsp = new GSPlayer(rs.getInt("pkgsusers"),pname,gs);
 					gsp.setBuyItem(rs.getInt("buyItem"));
 					gsp.setBuyQty(rs.getInt("buyQty"));
 					gsp.setSellItems(rs.getString("sellItems"));
@@ -292,7 +292,7 @@ public class GSDataMySQL extends GSData{
 				if (rs.next()){
 					do {
 						String pname = rs.getString("username");
-						GSPlayer gsp = new GSPlayer(rs.getInt("pkgsusers"),pname);
+						GSPlayer gsp = new GSPlayer(rs.getInt("pkgsusers"),pname,gs);
 						gsp.setBuyItem(rs.getInt("buyItem"));
 						gsp.setBuyQty(rs.getInt("buyQty"));
 						gsp.setSellItems(rs.getString("sellItems"));
@@ -342,7 +342,7 @@ public class GSDataMySQL extends GSData{
 				SQLUtils.closeQuietly(rs);
 			}
 		}
-		GSPlayer gsp = new GSPlayer(id, name);
+		GSPlayer gsp = new GSPlayer(id, name,gs);
 		gsp.setLastBought(now.getTime());
 		gsp.setLastSold(now.getTime());
 		if (!playerData.containsKey(name))

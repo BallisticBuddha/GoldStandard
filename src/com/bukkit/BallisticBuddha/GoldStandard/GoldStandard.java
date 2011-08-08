@@ -58,6 +58,9 @@ public class GoldStandard extends JavaPlugin{
 	private int buyCooldown;
 	private int sellCooldown;
 	private boolean opCools;
+	private int defaultBuyItem;
+	private int defaultBuyQty;
+	private String defaultSellItems;
 	private List<String> sellMethods = new ArrayList<String>();
 	private GSCalc calc = null;
 	private Configuration config = new Configuration(new File("plugins/GoldStandard/config.yml"));
@@ -477,7 +480,9 @@ public class GoldStandard extends JavaPlugin{
         	boolean allowBlock = itemConfig.getBoolean("Items."+item+".Allow Block", this.allowBlock);
         	boolean buyback = itemConfig.getBoolean("Items."+item+".Buyback", this.buybackEnabled);
         	GSType gst = GSItem.GSType.valueOf(itemConfig.getString("Items."+item+".Type").toLowerCase());
-        	
+        	defaultBuyItem = itemConfig.getInt("Default.BuyItem", 0);
+        	defaultBuyQty = itemConfig.getInt("Default.BuyQty", 1);
+        	defaultSellItems = itemConfig.getString("Default.SellItems", "");
         	double price;
         	double min;
         	double max;
@@ -672,5 +677,14 @@ public class GoldStandard extends JavaPlugin{
     }
     public boolean opsObeyCooldown(){
     	return this.opCools;
+    }
+    public int getDefaultBuyItem(){
+    	return this.defaultBuyItem;
+    }
+    public int getDefaultBuyQty(){
+    	return this.defaultBuyQty;
+    }
+    public String getDefaultSellItems(){
+    	return this.defaultSellItems;
     }
 }

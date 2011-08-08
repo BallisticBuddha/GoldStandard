@@ -24,16 +24,18 @@ public class GSPlayer {
 	}
 	int ID;
 	String name;
-	TIntShortHashMap sellItems;
-	int buyItem = 0;
-	int buyQty = 1;
+	TIntShortHashMap sellItems = new TIntShortHashMap();
+	int buyItem;
+	int buyQty;
 	long lastBought = System.currentTimeMillis();
 	long lastSold = System.currentTimeMillis();
 	
-	public GSPlayer(int id, String name){
+	public GSPlayer(int id, String name, GoldStandard instance){
 		this.ID = id;
 		this.name = name;
-		this.sellItems = new TIntShortHashMap();
+		this.buyItem = instance.getDefaultBuyItem();
+		this.buyQty = instance.getDefaultBuyQty();
+		this.setSellItems(instance.getDefaultSellItems());
 	}
 	
 	public void setBuyItem(int bi){

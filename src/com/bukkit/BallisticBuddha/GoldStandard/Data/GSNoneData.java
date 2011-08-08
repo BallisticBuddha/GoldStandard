@@ -68,12 +68,13 @@ public class GSNoneData extends GSData {
 	@Override
 	public void addEntry(int amt, String usr, int item) {
 		transValues.adjustOrPutValue(item, amt, amt);
+		transactions.setProperty("Items."+item, transValues.get(item));
 		return;
 	}
 
 	@Override
 	public void addEntryNI(int amt, String usr, int item) {
-		//not supported for flatfiles
+		transactions.setProperty("Items."+item, transValues.get(item));
 		return;
 	}
 
@@ -108,7 +109,7 @@ public class GSNoneData extends GSData {
 		playerData.clear();
 		tmpCounter = 0;
 		for (String playerName : transactions.getKeys("Players")){
-			GSPlayer gsp = new GSPlayer(tmpCounter++, playerName);
+			GSPlayer gsp = new GSPlayer(tmpCounter++, playerName,gs);
 			gsp.setBuyItem(players.getInt("Players."+playerName+".buyItem",0));
 			gsp.setBuyQty(players.getInt("Players."+playerName+".buyQty", 1));
 			gsp.setSellItems(players.getString("Players."+playerName+".sellItems"));
@@ -123,7 +124,7 @@ public class GSNoneData extends GSData {
 	public boolean loadPlayer(String playerName) {
 		Boolean userexists = false;
 		if (players.getNode("Players."+playerName) != null){
-			GSPlayer gsp = new GSPlayer(tmpCounter++, playerName);
+			GSPlayer gsp = new GSPlayer(tmpCounter++, playerName,gs);
 			gsp.setBuyItem(players.getInt("Players."+playerName+".buyItem",0));
 			gsp.setBuyQty(players.getInt("Players."+playerName+".buyQty", 1));
 			gsp.setSellItems(players.getString("Players."+playerName+".sellItems"));
@@ -140,13 +141,14 @@ public class GSNoneData extends GSData {
 
 	@Override
 	public void addPlayer(String name) {
-		players.setProperty("Players"+name+"buyItem",0);
-		players.setProperty("Players"+name+"buyQty",1);
-		players.setProperty("Players"+name+"sellItems","");
-		players.setProperty("Players"+name+"lastBought",Long.toString(System.currentTimeMillis()));
-		players.setProperty("Players"+name+"lastSold",Long.toString(System.currentTimeMillis()));
+		players.setProperty("Players."+name, null);
+		players.setProperty("Players."+name+".buyItem",0);
+		players.setProperty("Players."+name+".buyQty",1);
+		players.setProperty("Players."+name+".sellItems","");
+		players.setProperty("Players."+name+".lastBought",Long.toString(System.currentTimeMillis()));
+		players.setProperty("Players."+name+".lastSold",Long.toString(System.currentTimeMillis()));
 		players.save();
-		this.playerData.put(name, new GSPlayer(tmpCounter++, name));
+		this.playerData.put(name, new GSPlayer(tmpCounter++, name,gs));
 		return;
 	}
 	
@@ -157,11 +159,11 @@ public class GSNoneData extends GSData {
 			return;
 		}
 		GSPlayer gsp = playerData.get(name);
-		players.setProperty("Players"+name+"buyItem",gsp.getBuyItem());
-		players.setProperty("Players"+name+"buyQty",gsp.getBuyQty());
-		players.setProperty("Players"+name+"sellItems",gsp.getSellItems());
-		players.setProperty("Players"+name+"lastBought",gsp.getLastBought());
-		players.setProperty("Players"+name+"lastSold",gsp.getLastBought());
+		players.setProperty("Players."+name+".buyItem",gsp.getBuyItem());
+		players.setProperty("Players."+name+".buyQty",gsp.getBuyQty());
+		players.setProperty("Players."+name+".sellItems",gsp.getSellItems());
+		players.setProperty("Players."+name+".lastBought",gsp.getLastBought());
+		players.setProperty("Players."+name+".lastSold",gsp.getLastBought());
 		players.save();
 		
 		playerData.remove(name);
@@ -175,11 +177,11 @@ public class GSNoneData extends GSData {
 			return;
 		}
 		GSPlayer gsp = playerData.get(name);
-		players.setProperty("Players"+name+"buyItem",gsp.getBuyItem());
-		players.setProperty("Players"+name+"buyQty",gsp.getBuyQty());
-		players.setProperty("Players"+name+"sellItems",gsp.getSellItems());
-		players.setProperty("Players"+name+"lastBought",gsp.getLastBought());
-		players.setProperty("Players"+name+"lastSold",gsp.getLastBought());
+		players.setProperty("Players."+name+".buyItem",gsp.getBuyItem());
+		players.setProperty("Players."+name+".buyQty",gsp.getBuyQty());
+		players.setProperty("Players."+name+".sellItems",gsp.getSellItems());
+		players.setProperty("Players."+name+".lastBought",gsp.getLastBought());
+		players.setProperty("Players."+name+".lastSold",gsp.getLastBought());
 		players.save();
 		return;
 	}
@@ -189,11 +191,11 @@ public class GSNoneData extends GSData {
 			return;
 		}
 		GSPlayer gsp = playerData.get(name);
-		players.setProperty("Players"+name+"buyItem",gsp.getBuyItem());
-		players.setProperty("Players"+name+"buyQty",gsp.getBuyQty());
-		players.setProperty("Players"+name+"sellItems",gsp.getSellItems());
-		players.setProperty("Players"+name+"lastBought",gsp.getLastBought());
-		players.setProperty("Players"+name+"lastSold",gsp.getLastBought());
+		players.setProperty("Players."+name+".buyItem",gsp.getBuyItem());
+		players.setProperty("Players."+name+".buyQty",gsp.getBuyQty());
+		players.setProperty("Players."+name+".sellItems",gsp.getSellItems());
+		players.setProperty("Players."+name+".lastBought",gsp.getLastBought());
+		players.setProperty("Players."+name+".lastSold",gsp.getLastBought());
 		return;
 	}
 	public void forceFileSave(){
